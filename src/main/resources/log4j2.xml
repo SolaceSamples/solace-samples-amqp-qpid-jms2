@@ -9,14 +9,14 @@
     OF ANY KIND, either express or implied. See the License for the specific language 
     governing permissions and limitations under the License. -->
 
-<!-- Solace AMQP JMS 1.1 Samples Log4j 2 configuration -->
+<!-- Solace AMQP JMS 2.0 Samples Log4j 2 configuration -->
 
 <Configuration status="WARN">
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{ISO8601} %p %c{2} - %m%n" />
         </Console>
-        <File name="FILE" fileName="solace-amqp-jms1.log">
+        <File name="FILE" fileName="solace-amqp-jms2.log">
             <PatternLayout pattern="%d{ISO8601} %p %c{2} - %m%n" />
         </File>
     </Appenders>

@@ -18,7 +18,7 @@
  */
 
 /**
- *  Solace AMQP JMS 1.1 Samples: MessageProducer
+ *  Solace AMQP JMS 2.0 Samples: MessageProducer
  */
 
 package com.solace.samples;
@@ -40,7 +40,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
- * AMQP Container that produces messages using JMS 1.1 API. Solace Message Router is used as the message broker.
+ * AMQP Container that produces messages using JMS 2.0 API. Solace Message Router is used as the message broker.
  * 
  * This is the Publisher in the Publish/Subscribe messaging pattern.
  */

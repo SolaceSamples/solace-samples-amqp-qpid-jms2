@@ -18,7 +18,7 @@
  */
 
 /**
- *  Solace AMQP JMS 1.1 Samples: SimpleReplier
+ *  Solace AMQP JMS 2.0 Samples: SimpleReplier
  */
 
 package com.solace.samples;
@@ -46,7 +46,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
- * AMQP Container that uses JMS 1.1 API to receive a request message and replies to it. Solace Message Router is used as
+ * AMQP Container that uses JMS 2.0 API to receive a request message and replies to it. Solace Message Router is used as
  * the message broker.
  * 
  * This is the Replier in the Request/Reply messaging pattern.
