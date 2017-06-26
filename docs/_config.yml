@@ -1,0 +1,26 @@
+# Site settings
+title: Solace Samples AMQP JMS 1.1
+baseurl: "/solace-samples-amqp-jms1"
+repository: https://github.com/dfedorov-solace/solace-samples-amqp-jms1
+
+# Also see _includes/intro.html to customize the description which gets included in index.html.
+
+# Links
+links-community: http://dev.solace.com/community/
+docs-vmr-setup: http://docs.solace.com/Solace-VMR-Set-Up/Setting-Up-VMRs.htm
+docs-core-concepts: http://docs.solace.com/Features/Core-Concepts.htm
+
+#----------------------------------------------------
+# Generally don't modify items below this point
+url: "solacesamples.github.io" # the base hostname & protocol for your site
+
+# Google services
+google_analytics: UA-3921398-7
+
+# Build settings
+markdown: kramdown
+
+collections:
+  tutorials:
+    output: true
+    permalink: /:path/
