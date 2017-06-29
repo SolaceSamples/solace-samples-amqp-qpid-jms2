@@ -1,3 +1,5 @@
+This project depends on the following libraries:
+
 geronimo-jms_2.0_spec-1.0-alpha-2.jar
 log4j-api-2.8.2.jar
 log4j-core-2.8.2.jar
@@ -13,3 +15,5 @@ netty-transport-native-epoll-4.1.9.Final-linux-x86_64.jar
 proton-j-0.19.0.jar
 qpid-jms-client-0.23.0.jar
 slf4j-api-1.7.25.jar
+
+Also see pom.xml for the list of packaged dependencies

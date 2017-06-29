@@ -9,7 +9,7 @@
     OF ANY KIND, either express or implied. See the License for the specific language 
     governing permissions and limitations under the License. -->
 
-<!-- Solace AMQP JMS 2.0 Samples: Maven pom.xml -->
+<!-- Solace AMQP JMS 2.0 Examples: Maven pom.xml -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -17,8 +17,8 @@
     <groupId>amqp</groupId>
     <artifactId>jms2</artifactId>
     <version>1.0.1-SNAPSHOT</version>
-    <name>AMQP JMS 2.0 Samples</name>
-    <description>Solace Messaging Samples for JMS 2.0 over AMQP 1.0</description>
+    <name>AMQP JMS 2.0 Examples</name>
+    <description>Solace Messaging Examples for JMS 2.0 over AMQP 1.0</description>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>

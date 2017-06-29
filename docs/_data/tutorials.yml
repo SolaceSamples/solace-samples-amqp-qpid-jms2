@@ -1,4 +1,4 @@
-- title: AMQP JMS 1.1 Tutorials
+- title: AMQP JMS 2.0 Tutorials
   tutorials:
   - publish-subscribe
   - request-reply

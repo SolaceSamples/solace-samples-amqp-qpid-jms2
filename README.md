@@ -1,6 +1,6 @@
 # Getting Started Tutorials
 
-## Using JMS 1.1 over AMQP 1.0 with Solace Message Routers
+## Using JMS 2.0 over AMQP 1.0 with Solace Message Routers
 
 The Advanced Message Queuing Protocol (AMQP) is an open standard application layer protocol for message-oriented middleware, and Solace Message Routers support AMQP 1.0.
 
@@ -17,13 +17,11 @@ The "Getting Started" tutorials will get you up to speed and sending messages wi
 
 ## Contents
 
-This repository contains code and matching tutorial walkthroughs for different basic scenarios. It is best to view the associated [tutorials home page](https://solacesamples.github.io/solace-samples-amqp-jms1/).
+This repository contains code and matching tutorial walkthroughs for different basic scenarios. It is best to view the associated [tutorials home page](https://solacesamples.github.io/solace-samples-amqp-jms2/).
 
-## Exploring Tutorial Samples
+## Exploring Tutorial Examples
 
 ### Using Eclipse
-
-#### Using Maven
 
 To generate the project metadata (.classpath and .project files), do the following:
 
@@ -32,42 +30,9 @@ To generate the project metadata (.classpath and .project files), do the followi
 ```
 
 Once complete, you may then import the project into Eclipse:
-
    *File -> Import -> Existing Maven projects*
 
-Browse to the *'solace-samples-amqp-jms1'* root directory. The project should import free of errors.
-
-#### Using Gradle
-
-To generate the project metadata (.classpath and .project files), do the following:
-
-```sh
-./gradlew eclipse
-```
-
-Once complete, you may then import the project into Eclipse:
-
-   *File -> Import -> Existing projects into workspace*
-
-Browse to the *'solace-samples-amqp-jms1'* root directory. The project should import free of errors.
-
-### Using IntelliJ IDEA
-
-#### Using Maven
-
-To generate the project metadata (.iml and .ipr files), do the following:
-
-```sh
-./mvn idea:idea
-```
-
-#### Using Gradle
-
-To generate the project metadata (.iml and .ipr files), do the following:
-
-```sh
-./gradlew idea
-```
+Browse to the *'solace-samples-amqp-jms2'* root directory. The project should import free of errors.
 
 ## Contributing
 
@@ -75,7 +40,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Authors
 
-See the list of [contributors](https://github.com/dfedorov-solace/solace-samples-amqp-jms1/contributors) who participated in this project.
+See the list of [contributors](https://github.com/dfedorov-solace/solace-samples-amqp-jms2/contributors) who participated in this project.
 
 ## License
 

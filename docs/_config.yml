@@ -1,7 +1,7 @@
 # Site settings
-title: Solace Samples AMQP JMS 1.1
-baseurl: "/solace-samples-amqp-jms1"
-repository: https://github.com/dfedorov-solace/solace-samples-amqp-jms1
+title: Solace Messaging using JMS 2.0 over AMQP
+baseurl: "/solace-samples-amqp-jms2"
+repository: https://github.com/dfedorov-solace/solace-samples-amqp-jms2
 
 # Also see _includes/intro.html to customize the description which gets included in index.html.
 
