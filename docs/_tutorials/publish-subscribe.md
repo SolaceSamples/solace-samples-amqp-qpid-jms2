@@ -122,7 +122,6 @@ topic.topicLookup = amqp.tutorial.topic
 
 Notice how JMS 2.0 API allows to use *method chaining* to create the consumer and receive messages published to the subscribed topic.
 
-
 *TopicSubscriber.java*
 ~~~java
 Topic source = (Topic) initialContext.lookup("topicLookup");

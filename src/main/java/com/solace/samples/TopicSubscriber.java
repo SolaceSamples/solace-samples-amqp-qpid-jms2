@@ -18,7 +18,7 @@
  */
 
 /**
- *  Solace AMQP JMS 2.0 Samples: TopicSubscriber
+ *  Solace AMQP JMS 2.0 Examples: TopicSubscriber
  */
 
 package com.solace.samples;
@@ -54,8 +54,7 @@ public class TopicSubscriber {
         try {
             // pick up properties from the "jndi.properties" file
             Context initialContext = new InitialContext();
-            ConnectionFactory factory = (ConnectionFactory) initialContext
-                    .lookup(SOLACE_CONNECTION_LOOKUP);
+            ConnectionFactory factory = (ConnectionFactory) initialContext.lookup(SOLACE_CONNECTION_LOOKUP);
 
             // establish connection that uses the Solace Message Router as a message broker
             try (JMSContext context = factory.createContext()) {
@@ -71,6 +70,8 @@ public class TopicSubscriber {
             } catch (JMSRuntimeException ex) {
                 LOG.error(ex);
             }
+
+            initialContext.close();
         } catch (NamingException ex) {
             LOG.error(ex);
         }
