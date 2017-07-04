@@ -95,7 +95,7 @@ The name of the queue for sending requests is loaded by `javax.naming.InitialCon
 
 *jndi.properties*
 ~~~
-queue.queueLookup = amqp.tutorial.queue
+queue.queueLookup = amqp/tutorial/queue
 ~~~
 
 *SimpleRequestor.java*
@@ -151,7 +151,7 @@ The name of the queue for receiving requests is loaded by `javax.naming.InitialC
 
 *jndi.properties*
 ~~~
-queue.queueLookup = amqp.tutorial.queue
+queue.queueLookup = amqp/tutorial/queue
 ~~~
 
 *SimpleReplier.java*
@@ -255,7 +255,7 @@ Notice how the request is received by the `SimpleReplier` and replied to.
 2017-06-29T17:23:00,913 INFO jms.JmsConnection - Connection ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1 connected to remote Broker: amqp://192.168.123.45:8555
 2017-06-29T17:23:32,727 INFO samples.SimpleReplier - Received request with string data: "Request with String Data"
 2017-06-29T17:23:32,742 INFO samples.SimpleReplier - Request Message replied successfully.
-2017-06-29T17:23:35,746 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1:1:1, destination = amqp.tutorial.queue }
+2017-06-29T17:23:35,746 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1:1:1, destination = amqp/tutorial/queue }
 ~~~
 
 Now you know how to use JMS 2.0 API over AMQP using the Solace Message Router to implement the request/reply message exchange pattern.

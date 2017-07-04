@@ -97,7 +97,7 @@ The name of the topic is loaded by the `javax.naming.InitialContext.InitialConte
 
 *jndi.properties*
 ~~~
-topic.topicLookup = amqp.tutorial.topic
+topic.topicLookup = amqp/tutorial/topic
 ~~~
 
 JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and publish the message.
@@ -117,7 +117,7 @@ The name of the topic is loaded by `javax.naming.InitialContext.InitialContext()
 
 *jndi.properties*
 ~~~
-topic.topicLookup = amqp.tutorial.topic
+topic.topicLookup = amqp/tutorial/topic
 ~~~
 
 JMS 2.0 API allows the use of *method chaining* to create the consumer, and receive messages published to the subscribed topic.
@@ -184,7 +184,7 @@ Notice how the published message is received by the the `TopicSubscriber`.
 2017-06-29T15:20:03,794 INFO samples.TopicSubscriber - Waiting for a message...
 2017-06-29T15:20:03,813 INFO jms.JmsConnection - Connection ID:a09e9b79-9c34-422a-ac14-9ec928b5883a:1 connected to remote Broker: amqp://192.168.123.45:8555
 2017-06-29T15:21:15,877 INFO samples.TopicSubscriber - Received message with string data: "Message with String Data"
-2017-06-29T15:21:15,885 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:a09e9b79-9c34-422a-ac14-9ec928b5883a:1:1:1, destination = amqp.tutorial.topic }
+2017-06-29T15:21:15,885 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:a09e9b79-9c34-422a-ac14-9ec928b5883a:1:1:1, destination = amqp/tutorial/topic }
 ~~~
 
 You now know how to use JMS 2.0 API over AMQP using the Solace Message Router to implement the publish/subscribe message exchange pattern.
