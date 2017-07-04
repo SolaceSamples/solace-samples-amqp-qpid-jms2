@@ -91,7 +91,7 @@ At this point the application is connected to the Solace Message Router and read
 
 ## Sending a request
 
-The name of the queue for sending requests is loaded by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. It must exist on the Solace Message Router as a `durable queue`.
+The name of the queue for sending requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. It must exist on the Solace Message Router as a `durable queue`.
 
 *jndi.properties*
 ~~~
@@ -138,7 +138,7 @@ request.setJMSReplyTo(replyQueue);
 request.setJMSCorrelationID(UUID.randomUUID().toString());
 ~~~
 
-Now create a JMS producer and send the request. We assign the delivery mode to “non-persistent” for better performance. Notice how JMS 2.0 API allows to use *method chaining* to create the producer, set the delivery mode and to send the message.
+Create a JMS producer and send the request. Assign the delivery mode to “non-persistent” for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
 
 *SimpleRequestor.java*
 ~~~java
@@ -147,7 +147,7 @@ context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(targe
 
 ## Receiving a request
 
-The name of the queue for receiving requests is loaded by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, and it is the same as the one to which we send requests.
+The name of the queue for receiving requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, and it's the same as the one to which we send requests.
 
 *jndi.properties*
 ~~~
@@ -160,7 +160,7 @@ Queue source = (Queue) initialContext.lookup("queueLookup");
 ...
 ~~~
 
-Now create a JMS consumer and receive the request. Notice how JMS 2.0 API allows to use *method chaining* to create the consumer and receive a message from the queue.
+NCreate a JMS consumer and receive the request. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
 
 *SimpleReplier.java*
 ~~~java
@@ -183,14 +183,14 @@ if (request instanceof TextMessage) {
 
 Now we can send the reply message.
 
-We must send it to the temporary queue that was created by the requestor. We need to create an instance of the `org.apache.qpid.jms.JmsTemporaryQueue` class for the reply destination and assign it a name from the request `JMSReplyTo` property because of the Apache Qpid JMS implementation.
+We must send it to the temporary queue that was created by the requestor. Create an instance of the `org.apache.qpid.jms.JmsTemporaryQueue` class for the reply destination and assign it a name from the request `JMSReplyTo` property because of the Apache Qpid JMS implementation.
 
 *SimpleReplier.java*
 ~~~java
 Destination replyDestination = new JmsTemporaryQueue(((Queue) request.getJMSReplyTo()).getQueueName());
 ~~~
 
-To send the reply message a JMS producer needs to be created. We assign its delivery mode to “non-persistent” for better performance. Notice how JMS 2.0 API allows to use *method chaining* to create the producer, set the delivery mode and to send the reply message.
+A JMS producer needs to be created to send the reply message. Assign its delivery mode to “non-persistent” for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the reply message.
 
 *SimpleReplier.java*
 ~~~java
@@ -219,7 +219,7 @@ To build a jar file that includes all dependencies execute the following:
 mvn assembly:single
 ~~~
 
-Then the examples can be executed as:
+The examples can be executed as:
 
 ~~~sh
 java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.SimpleReplier
@@ -228,7 +228,7 @@ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.
 
 ## Sample Output
 
-First start the `SimpleReplier` so that it is up and waiting for requests.
+First, start the `SimpleReplier` so that it's up and waiting for requests.
 
 ~~~sh
 $ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.SimpleReplier
