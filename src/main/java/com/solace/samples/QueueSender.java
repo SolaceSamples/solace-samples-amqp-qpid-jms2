@@ -30,7 +30,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSContext;
 import javax.jms.JMSRuntimeException;
-import javax.jms.TextMessage;
 import javax.jms.Queue;
 import javax.naming.Context;
 import javax.naming.InitialContext;

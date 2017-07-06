@@ -5,9 +5,15 @@ summary: Demonstrates the request/reply message exchange pattern
 icon: request-reply-icon.png
 ---
 
-This tutorial will demonstrate to you to how to connect a JMS 2.0 API client to a Solace Message Router using AMQP, send a request, reply to it, and receive the reply. This the request/reply message exchange pattern as illustrated here:
+This tutorial builds on the basic concepts introduced in the [persistence with queues tutorial]({{ site.baseurl }}/persistence-with-queues){:target="_blank"}, and will show you how to send a request, reply to it, and receive the reply. This the request/reply message exchange pattern as illustrated here:
 
 ![Sample Image Text]({{ site.baseurl }}/images/request-reply-icon.png)
+
+This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
+
+At the end, this tutorial walks through downloading and running the sample from source.
+
+This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({{ site.links-get-started-jms }}){:target="_blank"}.
 
 ## Assumptions
 
@@ -15,8 +21,12 @@ This tutorial assumes the following:
 
 * You are familiar with Solace [core concepts]({{ site.docs-core-concepts }}){:target="_top"}.
 * You have access to a running Solace message router with the following configuration:
-    * Enabled “default” message VPN
-    * Enabled “default” client username
+    * Enabled `default` message VPN
+    * Enabled `default` client username
+    * Enabled `default` client profile with guaranteed messaging permissions.
+    * A durable queue with the name `amqp/tutorial/queue` exists on the `default` message VPN.
+         * See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for details on how to configure durable queues on Solace Message Routers with Solace CLI.
+         * See [Management Tools]({{ site.docs-management-tools }}){:target="_top"} for other tools for configure durable queues.
 
 One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will run with the “default” message VPN configured and ready for messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration, adapt the instructions to match your configuration.
 
@@ -56,6 +66,18 @@ In order to send or receive messages to a Solace message router, you need to kno
 </tbody>
 </table>
 
+## Java Messaging Service (JMS) Introduction
+
+JMS is a standard API for sending and receiving messages. As such, in addition to information provided on the Solace developer portal, you may also look at some external sources for more details about JMS. The following are good places to start
+
+1. [http://java.sun.com/products/jms/docs.html](http://java.sun.com/products/jms/docs.html){:target="_blank"}.
+2. [https://en.wikipedia.org/wiki/Java_Message_Service](https://en.wikipedia.org/wiki/Java_Message_Service){:target="_blank"}
+3. [https://docs.oracle.com/javaee/7/tutorial/partmessaging.htm#GFIRP3](https://docs.oracle.com/javaee/7/tutorial/partmessaging.htm#GFIRP3){:target="_blank"}
+
+The last (Oracle docs) link points you to the JEE official tutorials which provide a good introduction to JMS.
+
+This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
+
 ## Obtaining JMS 2.0 API
 
 This tutorial depends on you having the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html) downloaded and installed for your project, and the instructions in this tutorial assume you successfully done it. If your environment differs then adjust the build instructions appropriately.
@@ -90,6 +112,10 @@ The session created by the `JMSContext` object by default is non-transacted and 
 At this point the application is connected to the Solace Message Router and ready to send and receive request and reply messages.
 
 ## Sending a request
+
+In order to send a request a JMS *Producer* needs to be created.
+
+![sending-message-to-queue]({{ site.baseurl }}/images/request-reply-details-2.png)
 
 The name of the queue for sending requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. It must exist on the Solace Message Router as a `durable queue`.
 
@@ -129,7 +155,13 @@ The request must have two properties assigned: `JMSReplyTo` and `JMSCorrelationI
 
 The `JMSReplyTo` property needs to have the value of the temporary queue for receiving the reply that was already created.
 
-The `JMSCorrelationID` property needs to have an unique value.
+The `JMSCorrelationID` property needs to have an unique value so the requestor to correlate the request with the subsequent reply.
+
+The figure below outlines the exchange of messages and the role of both properties.
+
+
+![]({{ site.baseurl }}/images/request-reply-details-1.png)
+
 
 *SimpleRequestor.java*
 ~~~java
@@ -146,6 +178,8 @@ context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(targe
 ~~~
 
 ## Receiving a request
+
+In order to receive a request from a queue a JMS *Consumer* needs to be created.
 
 The name of the queue for receiving requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, and it's the same as the one to which we send requests.
 
@@ -168,6 +202,10 @@ Message request = context.createConsumer(source).receive();
 ~~~
 
 ## Replying to a request
+
+To reply to a received request a JMS *Producer* needs to be created.
+
+![Request-Reply_diagram-3]({{ site.baseurl }}/images/request-reply-details-3.png)
 
 The reply message must have the `JMSCorrelationID` property value assigned from the received request. Create the reply message using the current `JMSContext` and assign its `JMSCorrelationID` property from the request value:
 
@@ -207,7 +245,16 @@ Combining the example source code shown above results in the following source co
 *   [SimpleRequestor.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/SimpleRequestor.java){:target="_blank"}
 *   [SimpleReplier.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/SimpleReplier.java){:target="_blank"}
 
-## Building
+### Getting the Source
+
+Clone the GitHub repository containing the Solace samples.
+
+```
+git clone {{ site.repository }}
+cd {{ site.baseurl | remove: '/'}}
+```
+
+### Building
 
 Modify the *jndi.properties* file to reflect your Solace Message Router host and port number for the AMQP service.
 
@@ -219,16 +266,16 @@ To build a jar file that includes all dependencies execute the following:
 mvn assembly:single
 ~~~
 
-The examples can be executed as:
+Then the examples can be executed as:
 
 ~~~sh
 java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.SimpleReplier
 java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.SimpleRequestor
 ~~~
 
-## Sample Output
+### Sample Output
 
-First, start the `SimpleReplier` so that it's up and waiting for requests.
+First start the `SimpleReplier` so that it is up and waiting for requests.
 
 ~~~sh
 $ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.SimpleReplier
