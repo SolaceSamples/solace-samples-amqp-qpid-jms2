@@ -1,4 +1,7 @@
 - title: AMQP JMS 2.0 Tutorials
   tutorials:
   - publish-subscribe
+  - persistence-with-queues
   - request-reply
+  - confirmed-delivery
+  - topic-to-queue-mapping

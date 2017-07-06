@@ -9,6 +9,12 @@ This tutorial will show you to how to connect a JMS 2.0 API client to a Solace M
 
 ![Sample Image Text]({{ site.baseurl }}/images/publish-subscribe-icon.png)
 
+This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
+
+At the end, this tutorial walks through downloading and running the sample from source.
+
+This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({{ site.links-get-started-jms }}){:target="_blank"}.
+
 ## Assumptions
 
 This tutorial assumes the following:
@@ -55,6 +61,18 @@ In order to send or receive messages to a Solace message router, you need to kno
 </tr>
 </tbody>
 </table>
+
+## Java Messaging Service (JMS) Introduction
+
+JMS is a standard API for sending and receiving messages. As such, in addition to information provided on the Solace developer portal, you may also look at some external sources for more details about JMS. The following are good places to start
+
+1. [http://java.sun.com/products/jms/docs.html](http://java.sun.com/products/jms/docs.html){:target="_blank"}.
+2. [https://en.wikipedia.org/wiki/Java_Message_Service](https://en.wikipedia.org/wiki/Java_Message_Service){:target="_blank"}
+3. [https://docs.oracle.com/javaee/7/tutorial/partmessaging.htm#GFIRP3](https://docs.oracle.com/javaee/7/tutorial/partmessaging.htm#GFIRP3){:target="_blank"}
+
+The last (Oracle docs) link points you to the JEE official tutorials which provide a good introduction to JMS.
+
+This tutorial focuses on using [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"}, for [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 2.0 Tutorials]({{ site.links-get-started-amqp-jms2 }}){:target="_blank"}.
 
 ## Obtaining JMS 2.0 API
 
@@ -138,7 +156,16 @@ Combining the example source code shown above results in the following source co
 *   [TopicPublisher.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/TopicPublisher.java){:target="_blank"}
 *   [TopicSubscriber.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/TopicSubscriber.java){:target="_blank"}
 
-## Building
+### Getting the Source
+
+Clone the GitHub repository containing the Solace samples.
+
+```
+git clone {{ site.repository }}
+cd {{ site.baseurl | remove: '/'}}
+```
+
+### Building
 
 Modify the *jndi.properties* file to reflect your Solace Message Router host and port number for the AMQP service.
 
@@ -150,14 +177,14 @@ To build a jar file that includes all dependencies execute the following:
 mvn assembly:single
 ~~~
 
-Then the examples can be executed as:
+The examples can be run as:
 
 ~~~sh
 java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.TopicSubscriber
 java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.TopicPublisher
 ~~~
 
-## Sample Output
+### Sample Output
 
 First, start `TopicSubscriber` so that it's up and waiting for published messages. You can start multiple instances of this application, and all of them will receive published messages.
 

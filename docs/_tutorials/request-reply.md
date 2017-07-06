@@ -160,7 +160,7 @@ Queue source = (Queue) initialContext.lookup("queueLookup");
 ...
 ~~~
 
-NCreate a JMS consumer and receive the request. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
+Create a JMS consumer and receive the request. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
 
 *SimpleReplier.java*
 ~~~java
