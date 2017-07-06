@@ -61,11 +61,9 @@ public class QueueSender {
             try (JMSContext context = factory.createContext()) {
                 // the target for messages: a queue that already exists on the message broker
                 Queue target = (Queue) initialContext.lookup(QUEUE_LOOKUP);
-                // prepare message
-                TextMessage message = context.createTextMessage("Message with String Data");
                 // send message
                 context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT)
-                        .send(target, message);
+                        .send(target, "Message with String Data");
                 LOG.info("Message message sent successfully.");
             } catch (JMSRuntimeException ex) {
                 LOG.error(ex);

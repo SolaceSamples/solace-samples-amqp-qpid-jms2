@@ -192,7 +192,7 @@ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.
 
 ### Sample Output
 
-First, start `TopicSubscriber` so that it's up and waiting for published messages. You can start multiple instances of this application, and all of them will receive published messages.
+First, start `TopicSubscriber` so that it is up and waiting for published messages. You can start multiple instances of this application, and all of them will receive published messages.
 
 ~~~sh
 $ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.TopicSubscriber
