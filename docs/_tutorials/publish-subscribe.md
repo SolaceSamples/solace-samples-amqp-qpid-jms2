@@ -72,13 +72,13 @@ JMS is a standard API for sending and receiving messages. As such, in addition t
 
 The last (Oracle docs) link points you to the JEE official tutorials which provide a good introduction to JMS.
 
-This tutorial focuses on using [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"}, for [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 2.0 Tutorials]({{ site.links-get-started-amqp-jms2 }}){:target="_blank"}.
+This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
 ## Obtaining JMS 2.0 API
 
 This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
-The easiest way to install the JMS 2.0 API is through Maven. See the project's *pom.xml* file for details.
+The easiest way to install it is through Maven. See the project's *pom.xml* file for details.
 
 ## Connecting to the Solace Message Router
 
@@ -109,7 +109,11 @@ At this point the application is connected to the Solace Message Router and read
 
 ## Publishing messages
 
-A JMS producer needs to be created in order to publish a message to a topic. Assign its delivery mode to “non-persistent” for better performance.
+A JMS *Producer* needs to be created in order to publish a message to a topic.
+
+![]({{ site.baseurl }}/images/publish-subscribe-details-2.png)
+
+We assign its delivery mode to `non-persistent` for better performance.
 
 The name of the topic is loaded by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file.
 
@@ -127,11 +131,13 @@ context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(targe
 
 If you execute the `TopicPublisher.java` program, it will successfully publish a message, but another application is required to receive the message.
 
-## Receiving message
+## Receiving messages
 
 To receive a message from a topic a JMS consumer needs to be created.
 
-The name of the topic is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. Its name is the same as the one to which we publish messages.
+![]({{ site.baseurl }}/images/publish-subscribe-details-1.png)
+
+The name of the topic is loaded by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file and its name is the same as the one we publish messages to.
 
 *jndi.properties*
 ~~~
@@ -171,7 +177,7 @@ Modify the *jndi.properties* file to reflect your Solace Message Router host and
 
 You can build and run both example files directly from Eclipse.
 
-To build a jar file that includes all dependencies execute the following:
+If you prefer to use the command line, build a jar file that includes all dependencies by executing the following:
 
 ~~~sh
 mvn assembly:single
