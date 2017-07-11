@@ -31,9 +31,9 @@ One option is to use a management interface to administratively configure the to
 
 A second option is to consider using a Solace Java API session directly for this part of your application. This is outlined in the [Solace-specific Java API version of this tutorial]({{ site.links-get-started-java-topic-to-queue-mapping }}){:target="_top"}. This would involve opening a second client connection using a Java API Session and then mapping the required topics onto the desired queue. Then this Java API session can be closed.
 
-## Summarizing
+## Summary
 
-So in summary JMS applications wishing to take advantage of this feature have two options:
+JMS applications wishing to take advantage of this feature have two options:
 
 *   [Use one of the Solace management interfaces and directly configure the topic subscriptions on the queue]({{ site.docs-topic-mapping }}){:target="_top"}.
 *   [Use the Solace API for Java directly for this part of your application]({{ site.links-get-started-java-topic-to-queue-mapping }}){:target="_top"}.
