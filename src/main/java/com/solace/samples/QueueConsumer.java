@@ -18,59 +18,71 @@
  */
 
 /**
- *  Solace AMQP JMS 2.0 Examples: TopicSubscriber
+ *  Solace AMQP JMS 2.0 Examples: QueueReceiver
  */
 
 package com.solace.samples;
 
+import org.apache.qpid.jms.JmsConnectionFactory;
+import java.util.concurrent.CountDownLatch;
+
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
-import javax.jms.Topic;
-
-import org.apache.qpid.jms.JmsConnectionFactory;
+import javax.jms.Message;
+import javax.jms.TextMessage;
+import javax.jms.Queue;
 
 /**
- * Subscribes to messages published to a topic using JMS 2.0 API over AMQP 1.0 Solace Message Router is used as the
- * message broker.
- *
- * This is the Subscriber in the Publish/Subscribe messaging pattern.
+ * Receives a persistent message from a queue using JMS 2.0 API over AMQP. Solace Message Router is used as the message
+ * broker.
+ * 
+ * The queue used for messages is created on the message broker.
  */
-public class TopicSubscriber {
+public class QueueConsumer {
 
     final String SOLACE_USERNAME = "clientUsername";
     final String SOLACE_PASSWORD = "password";
 
-    final String TOPIC_NAME = "T/GettingStarted/pubsub";
+    final String QUEUE_NAME = "Q/tutorial";
+
+    // Latch used for synchronizing between threads
+    final CountDownLatch latch = new CountDownLatch(1);
 
     private void run(String... args) throws Exception {
         String solaceHost = args[0];
-        System.out.printf("TopicSubscriber is connecting to Solace router %s...%n", solaceHost);
+        System.out.printf("QueueConsumer is connecting to Solace router %s...%n", solaceHost);
 
         // Programmatically create the connection factory using default settings
         ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
 
-        // Establish connection that uses the Solace Message Router as a message broker
+        // establish connection that uses the Solace Message Router as a message broker
         try (JMSContext context = connectionFactory.createContext()) {
+            // the source for messages: a queue that already exists on the broker
+            System.out.printf("Connected with username '%s'.%n", SOLACE_USERNAME);
 
-            System.out.printf("Connected to the Solace router with client username '%s'.%n", SOLACE_USERNAME);
-
-            // Create the publishing topic programmatically
-            Topic topic = context.createTopic(TOPIC_NAME);
+            // Create the queue programmatically and the corresponding router resource
+            Queue queue = context.createQueue(QUEUE_NAME);
 
             System.out.println("Awaiting message...");
             // create consumer and wait for a message to arrive.
             // the current thread blocks at the next statement until a message arrives
-            String message = context.createConsumer(topic).receiveBody(String.class);
+            Message message = context.createConsumer(queue).receive();
 
-            System.out.printf("Message received: '%s'%n", message);
+            // process received message
+            if (message instanceof TextMessage) {
+                System.out.printf("TextMessage received: '%s'%n", ((TextMessage) message).getText());
+            } else {
+                System.out.println("Message received.");
+            }
+            System.out.printf("Message Content:%n%s%n", message.toString());
         }
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length < 1) {
-            System.out.println("Usage: TopicSubscriber amqp://<msg_backbone_ip:amqp_port>");
+            System.out.println("Usage: QueueConsumer amqp://<msg_backbone_ip:amqp_port>");
             System.exit(-1);
         }
-        new TopicSubscriber().run(args);
+        new QueueConsumer().run(args);
     }
 }
