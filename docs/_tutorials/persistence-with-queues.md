@@ -24,9 +24,6 @@ This tutorial assumes the following:
     * Enabled `default` message VPN
     * Enabled `default` client username
     * Enabled `default` client profile with guaranteed messaging permissions.
-    * A durable queue with the name `amqp/tutorial/queue` exists on the `default` message VPN.
-         * See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for details on how to configure durable queues on Solace Message Routers with Solace CLI.
-         * See [Management Tools]({{ site.docs-management-tools }}){:target="_top"} for other tools for configure durable queues.
 
 One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will run with the `default` message VPN configured and ready for messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration, adapt the instructions to match your configuration.
 
@@ -34,7 +31,7 @@ One simple way to get access to a Solace message router is to start a Solace VMR
 
 The goal of this tutorial is to demonstrate how to use JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
 
-1.  How to send a persistent message to a durable queue that exists on the Solace message router
+1.  How to send a persistent message to a durable queue on the Solace message router
 2.  How to bind to this queue and receive a persistent message
 
 ## Solace message router properties
@@ -86,26 +83,25 @@ The easiest way to do it through Maven. See the project's *pom.xml* file for det
 
 ## Connecting to the Solace Message Router
 
-In order to send or receive messages, an application must start a JMS connection.
+In order to send or receive messages, an application must start a JMS connection and a session.
 
-There is only one required parameter for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number. The value of this parameter is loaded in the examples by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, but of course it could be assigned directly in the application by assigning the corresponding environment variable.
+There are three parameters for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number, the client username and the optional password.
 
-*jndi.properties*
-~~~
-java.naming.factory.initial = org.apache.qpid.jms.jndi.JmsInitialContextFactory
-connectionfactory.solaceConnectionLookup = amqp://192.168.123.45:8555
-~~~
+*QueueProducer.java/QueueConsumer.java*
+```java
+final String SOLACE_USERNAME = "clientUsername";
+final String SOLACE_PASSWORD = "password";
+
+String solaceHost = args[0];
+ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
+```
 
 Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
-*TopicPublisher.java/TopicSubscriber.java*
-~~~java
-Context initialContext = new InitialContext();
-ConnectionFactory factory = (ConnectionFactory) initialContext.lookup("solaceConnectionLookup");
-
-try (JMSContext context = factory.createContext()) {
-...
-~~~
+*QueueProducer.java/QueueConsumer.java*
+```java
+JMSContext context = connectionFactory.createContext()
+```
 
 The session created by the `JMSContext` object by default is non-transacted and uses the acknowledge mode that automatically acknowledges a client's receipt of a message.
 
@@ -117,54 +113,45 @@ In order to send a message to a queue a JMS *Producer* needs to be created.
 
 ![sending-message-to-queue]({{ site.baseurl }}/images/persistence-with-queues-details-2.png)
 
-There is no difference in the actual method calls to the JMS producer when sending a JMS `persistent` message as compared to a JMS `non-persistent` message shown in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}. The difference in the JMS `persistent` message is that the Solace Message Router will acknowledge the message once it is successfully stored on the message router and the `QueueSender.send()` call will not return until it has successfully received this acknowledgement. This means that in JMS, all calls to the `Producer.send()` are blocking calls and they wait for message confirmation from the Solace message router before proceeding. This is outlined in the JMS specification and Solace JMS adheres to this requirement.
-
-The name of the queue for sending messages is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. It must exist on the Solace Message Router as a `durable queue`.
+There is no difference in the actual method calls to the JMS producer when sending a JMS `persistent` message as compared to a JMS `non-persistent` message shown in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}. The difference in the JMS `persistent` message is that the Solace Message Router will acknowledge the message once it is successfully stored on the message router and the `Producer.send()` call will not return until it has successfully received this acknowledgement. This means that in JMS, all calls to the `Producer.send()` are blocking calls and they wait for message confirmation from the Solace message router before proceeding. This is outlined in the JMS specification and Solace JMS adheres to this requirement.
 
 See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for details on how to configure durable queues on Solace Message Routers with Solace CLI.
 
 See [Management Tools]({{ site.docs-management-tools }}){:target="_top"} for other tools for configure durable queues.
 
-*jndi.properties*
-~~~
-queue.queueLookup = amqp/tutorial/queue
-~~~
-
 JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
 
-*QueueSender.java*
-~~~java
-Queue target = (Queue) initialContext.lookup("queueLookup");
-context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT).send(target, "Message with String Data");
-~~~
+*QueueProducer.java*
+```java
+final String QUEUE_NAME = "Q/tutorial";
+
+Queue queue = context.createQueue(QUEUE_NAME);
+TextMessage message = context.createTextMessage("Hello world Queues!");
+context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT).send(queue, "Hello world Queues!");
+```
 
 ## Receiving a persistent message from a queue
 
-To receive a persistent message from a queue a JMS consumer needs to be created.
+To receive a persistent message from a queue a JMS *Consumer* needs to be created.
 
 ![]({{ site.baseurl }}/images/persistence-with-queues-details-1.png)
 
-The name of the queue is loaded by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file and its name is the same as the one we publish messages to.
-
-*jndi.properties*
-~~~
-queue.queueLookup = amqp/tutorial/queue
-~~~
-
 JMS 2.0 API allows the use of *method chaining* to create the consumer and receive messages sent to the subscribed queue.
 
-*QueueReceiver.java*
-~~~java
-Queue source = (Queue) initialContext.lookup("queueLookup");
-Message message = context.createConsumer(source).receive();
-~~~
+*QueueConsumer.java*
+```java
+final String QUEUE_NAME = "Q/tutorial";
+
+Queue queue = context.createQueue(QUEUE_NAME);
+Message message = context.createConsumer(queue).receive();
+```
 
 ## Summarizing
 
 Combining the example source code shown above results in the following source code files:
 
-*   [QueueSender.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/QueueSender.java){:target="_blank"}
-*   [QueueReceiver.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/QueueReceiver.java){:target="_blank"}
+*   [QueueProducer.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/QueueProducer.java){:target="_blank"}
+*   [QueueConsumer.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/QueueConsumer.java){:target="_blank"}
 
 ### Getting the Source
 
@@ -177,53 +164,65 @@ cd {{ site.baseurl | remove: '/'}}
 
 ### Building
 
-Modify the *jndi.properties* file to reflect your Solace Message Router host and port number for the AMQP service.
-
 You can build and run both example files directly from Eclipse.
 
 To build a jar file that includes all dependencies execute the following:
 
-~~~sh
+```sh
+mvn compile
 mvn assembly:single
-~~~
+```
+
+or
+
+```sh
+./gradlew assemble
+```
 
 Then the examples can be executed as:
 
-~~~sh
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueReceiver
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueSender
-~~~
+```sh
+java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueConsumer amqp://SOLACE_HOST:AMQP_PORT
+java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueProducer amqp://SOLACE_HOST:AMQP_PORT
+```
+
+or
+
+```sh
+cd build/staged/bin
+./queueConsumer amqp://SOLACE_HOST:AMQP_PORT
+./queueProducer amqp://SOLACE_HOST:AMQP_PORT
+```
 
 ### Sample Output
 
-First start the `QueueReceiver` so that it is up and waiting for messages.
+First start the `QueueConsumer` so that it is up and waiting for messages.
 
-~~~sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueReceiver
-2017-07-06T14:22:34,825 INFO sasl.SaslMechanismFinder - Best match for SASL auth was: SASL-ANONYMOUS
-2017-07-06T14:22:34,855 INFO samples.QueueReceiver - Waiting for a persistent message...
-2017-07-06T14:22:34,915 INFO jms.JmsConnection - Connection ID:1827298d-0da3-4c7e-89ff-6e95c862b7c7:1 connected to remote Broker: amqp://192.168.123.45:8555
-~~~
+```sh
+$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueConsumer amqp://SOLACE_HOST:AMQP_PORT
+QueueConsumer is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
+Connected with username 'clientUsername'.
+Awaiting message...
+```
 
-Then you can start the `QueueSender` to send the message.
+Then you can start the `QueueProducer` to send the message.
 
-~~~sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueSender
-2017-07-06T14:23:33,712 INFO sasl.SaslMechanismFinder - Best match for SASL auth was: SASL-ANONYMOUS
-2017-07-06T14:23:33,792 INFO jms.JmsConnection - Connection ID:372c9956-0ad2-424b-9fa5-9569f45e40e0:1 connected to remote Broker: amqp://192.168.123.45:8555
-2017-07-06T14:23:33,892 INFO samples.QueueSender - Message message sent successfully.
-2017-07-06T14:23:33,922 INFO jms.JmsSession - A JMS MessageProducer has been closed: JmsProducerInfo { ID:372c9956-0ad2-424b-9fa5-9569f45e40e0:1:1:1, destination = null }
-~~~
+```sh
+$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueProducer amqp://SOLACE_HOST:AMQP_PORT
+QueueProducer is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
+Connected with username 'clientUsername'.
+Sending message 'Hello world Queues!' to queue 'Q/tutorial'...
+Sent successfully. Exiting...
+```
 
 Notice how the message is received by the `QueueReceiver`.
 
-~~~sh
-...
-2017-07-06T14:22:34,855 INFO samples.QueueReceiver - Waiting for a persistent message...
-2017-07-06T14:22:34,915 INFO jms.JmsConnection - Connection ID:1827298d-0da3-4c7e-89ff-6e95c862b7c7:1 connected to remote Broker: amqp://192.168.133.16:8555
-2017-07-06T14:23:33,912 INFO samples.QueueReceiver - Received message with string data: "Message with String Data"
-2017-07-06T14:23:33,932 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:1827298d-0da3-4c7e-89ff-6e95c862b7c7:1:1:1, destination = amqp/tutorial/queue }
-~~~
+```sh
+Awaiting message...
+TextMessage received: 'Hello world Queues!'
+Message Content:
+JmsTextMessage { org.apache.qpid.jms.provider.amqp.message.AmqpJmsTextMessageFacade@be64738 }
+```
 
 Now you know how to use JMS 2.0 API over AMQP using the Solace Message Router to send and receive persistent messages from a queue.
 

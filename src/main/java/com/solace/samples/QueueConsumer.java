@@ -45,9 +45,6 @@ public class QueueConsumer {
 
     final String QUEUE_NAME = "Q/tutorial";
 
-    // Latch used for synchronizing between threads
-    final CountDownLatch latch = new CountDownLatch(1);
-
     private void run(String... args) throws Exception {
         String solaceHost = args[0];
         System.out.printf("QueueConsumer is connecting to Solace router %s...%n", solaceHost);

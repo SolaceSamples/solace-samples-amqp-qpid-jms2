@@ -24,9 +24,6 @@ This tutorial assumes the following:
     * Enabled `default` message VPN
     * Enabled `default` client username
     * Enabled `default` client profile with guaranteed messaging permissions.
-    * A durable queue with the name `amqp/tutorial/queue` exists on the `default` message VPN.
-         * See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for details on how to configure durable queues on Solace Message Routers with Solace CLI.
-         * See [Management Tools]({{ site.docs-management-tools }}){:target="_top"} for other tools for configure durable queues.
 
 One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will run with the “default” message VPN configured and ready for messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration, adapt the instructions to match your configuration.
 
@@ -86,28 +83,29 @@ The easiest way to do it through Maven. See the project's *pom.xml* file for det
 
 ## Connecting to the Solace Message Router
 
-In order to send or receive messages, an application must start a JMS connection.
+In order to send or receive messages, an application must start a JMS connection and a session.
 
-There is only one required parameter for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number. The value of this parameter is loaded in the examples by the `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, but of course it could be assigned directly in the application by assigning the corresponding environment variable.
+There are three parameters for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number, the client username and the optional password.
 
-*jndi.properties*
-~~~
-java.naming.factory.initial = org.apache.qpid.jms.jndi.JmsInitialContextFactory
-connectionfactory.solaceConnectionLookup = amqp://192.168.123.45:8555
-~~~
+*BasicRequestor.java/BasicReplier.java*
+```java
+final String SOLACE_USERNAME = "clientUsername";
+final String SOLACE_PASSWORD = "password";
+
+String solaceHost = args[0];
+ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
+```
 
 Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
-*SimpleRequestor.java/SimpleReplier.java*
-~~~java
-Context initialContext = new InitialContext();
-ConnectionFactory factory = (ConnectionFactory) initialContext.lookup("solaceConnectionLookup");
-
-try (JMSContext context = factory.createContext()) {
-...
-~~~
+*BasicRequestor.java/BasicReplier.java*
+```java
+JMSContext context = connectionFactory.createContext()
+```
 
 The session created by the `JMSContext` object by default is non-transacted and uses the acknowledge mode that automatically acknowledges a client's receipt of a message.
+
+Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
 At this point the application is connected to the Solace Message Router and ready to send and receive request and reply messages.
 
@@ -117,39 +115,12 @@ In order to send a request a JMS *Producer* needs to be created.
 
 ![sending-message-to-queue]({{ site.baseurl }}/images/request-reply-details-2.png)
 
-The name of the queue for sending requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file. It must exist on the Solace Message Router as a `durable queue`.
-
-*jndi.properties*
-~~~
-queue.queueLookup = amqp/tutorial/queue
-~~~
-
-*SimpleRequestor.java*
-~~~java
-Queue target = (Queue) initialContext.lookup("queueLookup");
-...
-~~~
-
 Also, it is necessary to allocate a temporary queue for receiving the reply.
 
-*SimpleRequestor.java*
-~~~java
-TemporaryQueue replyQueue = session.createTemporaryQueue();
-context.createConsumer(replyQueue).setMessageListener(this);
-~~~
-
-Because the `SimpleRequestor` class will be receiving replies, it needs to implement `javax.jms.MessageListener`:
-
-*SimpleRequestor.java*
-~~~java
-public class SimpleRequestor implements MessageListener {
-<...>
-    @Override
-    public void onMessage(Message message) {
-        try {
-            LOG.info("Received reply: \"{}\"", ((TextMessage) message).getText());
-<...>
-~~~
+*BasicRequestor.java*
+```java
+TemporaryQueue replyToQueue = context.createTemporaryQueue();
+```
 
 The request must have two properties assigned: `JMSReplyTo` and `JMSCorrelationID`.
 
@@ -159,47 +130,38 @@ The `JMSCorrelationID` property needs to have an unique value so the requestor t
 
 The figure below outlines the exchange of messages and the role of both properties.
 
-
 ![]({{ site.baseurl }}/images/request-reply-details-1.png)
 
 
-*SimpleRequestor.java*
-~~~java
-TextMessage request = session.createTextMessage("Request with String Data");
-request.setJMSReplyTo(replyQueue);
-request.setJMSCorrelationID(UUID.randomUUID().toString());
-~~~
+*BasicRequestor.java*
+```java
+TextMessage request = context.createTextMessage("Sample Request");
+request.setJMSReplyTo(replyToQueue);
+String correlationId = UUID.randomUUID().toString();
+request.setJMSCorrelationID(correlationId);
+```
 
-Create a JMS producer and send the request. Assign the delivery mode to “non-persistent” for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
+Now we create a JMS producer and send the request. We assign the delivery mode to `non-persistent` for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
 
-*SimpleRequestor.java*
-~~~java
-context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(target, request);
-~~~
+*BasicRequestor.java*
+```java
+final String REQUEST_TOPIC_NAME = "T/GettingStarted/requests";
+
+Topic requestTopic = context.createTopic(REQUEST_TOPIC_NAME);
+context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(requestTopic, request);
+```
 
 ## Receiving a request
 
 In order to receive a request from a queue a JMS *Consumer* needs to be created.
 
-The name of the queue for receiving requests is loaded by `javax.naming.InitialContext.InitialContext()` from the *jndi.properties* project's file, and it's the same as the one to which we send requests.
+We create a JMS consumer and receive the request in the same, main thread. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
 
-*jndi.properties*
-~~~
-queue.queueLookup = amqp/tutorial/queue
-~~~
-
-*SimpleReplier.java*
-~~~java
-Queue source = (Queue) initialContext.lookup("queueLookup");
-...
-~~~
-
-Create a JMS consumer and receive the request. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
-
-*SimpleReplier.java*
-~~~java
-Message request = context.createConsumer(source).receive();
-~~~
+*BasicReplier.java*
+```java
+Topic requestTopic = context.createTopic(REQUEST_TOPIC_NAME);
+Message request = context.createConsumer(requestTopic).receive();
+```
 
 ## Replying to a request
 
@@ -209,41 +171,52 @@ To reply to a received request a JMS *Producer* needs to be created.
 
 The reply message must have the `JMSCorrelationID` property value assigned from the received request. Create the reply message using the current `JMSContext` and assign its `JMSCorrelationID` property from the request value:
 
-*SimpleReplier.java*
-~~~java
-Message request = context.createConsumer(source).receive();
-if (request instanceof TextMessage) {
-    TextMessage requestTextMessage = (TextMessage) request;
-    Message replyMessage = context.createTextMessage(String.format("Reply to \"%s\"", requestTextMessage.getText()));
-    replyMessage.setJMSCorrelationID(request.getJMSCorrelationID());
-...
-~~~
+*BasicReplier.java*
+```java
+Message request = context.createConsumer(requestTopic).receive();
+
+TextMessage reply = context.createTextMessage();
+String text = "Sample response";
+reply.setText(text);
+reply.setJMSCorrelationID(request.getJMSCorrelationID());
+```
 
 Now we can send the reply message.
 
-We must send it to the temporary queue that was created by the requestor. Create an instance of the `org.apache.qpid.jms.JmsTemporaryQueue` class for the reply destination and assign it a name from the request `JMSReplyTo` property because of the Apache Qpid JMS implementation.
+We must send it to the temporary queue that was created by the requestor. Create an instance of the `org.apache.qpid.jms.JmsDestination` class for the reply destination and assign it a name from the request `JMSReplyTo` property because of the way the Apache Qpid JMS client is implementated.
 
-*SimpleReplier.java*
-~~~java
-Destination replyDestination = new JmsTemporaryQueue(((Queue) request.getJMSReplyTo()).getQueueName());
-~~~
+*BasicReplier.java*
+```java
+Destination replyDestination = request.getJMSReplyTo();
+String replyDestinationName = ((JmsDestination) replyDestination).getName();
+replyDestination = new JmsTemporaryQueue(replyDestinationName);
+```
 
-A JMS producer needs to be created to send the reply message. Assign its delivery mode to “non-persistent” for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the reply message.
+A JMS producer needs to be created to send the reply message. Assign its delivery mode to `non-persistent` for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the reply message.
 
-*SimpleReplier.java*
-~~~java
-context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(replyDestination, replyMessage);
-...
-~~~
+*BasicReplier.java*
+```java
+context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(replyDestination, reply);
+```
 
-The reply will be received in a separate thread by the `SimpleRequestor.onMessage` routine.
+The reply will be received in the main thread by the `BasicRequestor`.
+
+*BasicRequestor.java*
+```java
+final int REPLY_TIMEOUT_MS = 10000;
+
+Message reply = context.createConsumer(replyToQueue).receive(REPLY_TIMEOUT_MS);
+```
+
+If you execute the `BasicReplier.java` program, it will block at the `context.createConsumer(requestTopic).receive()` call until a request is received. Now, if you execute the `BasicRequestor.java` that sends the request, the `BasicReplier.java` program will resume and reply to the request. That will unblock the `BasicRequestor.java` program that was blocked on the `context.createConsumer(replyToQueue).receive(REPLY_TIMEOUT_MS)` call waiting for the reply to its request.
+
 
 ## Summarizing
 
 Combining the example source code shown above results in the following source code files:
 
-*   [SimpleRequestor.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/SimpleRequestor.java){:target="_blank"}
-*   [SimpleReplier.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/SimpleReplier.java){:target="_blank"}
+*   [BasicRequestor.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/BasicRequestor.java){:target="_blank"}
+*   [BasicReplier.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/BasicReplier.java){:target="_blank"}
 
 ### Getting the Source
 
@@ -262,48 +235,63 @@ You can build and run both example files directly from Eclipse.
 
 To build a jar file that includes all dependencies execute the following:
 
-~~~sh
+```sh
+mvn compile
 mvn assembly:single
-~~~
+```
+
+or
+
+```sh
+./gradlew assemble
+```
 
 Then the examples can be executed as:
 
-~~~sh
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.SimpleReplier
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.SimpleRequestor
-~~~
+```sh
+java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.BasicReplier amqp://SOLACE_HOST:AMQP_PORT
+java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.BasicRequestor amqp://SOLACE_HOST:AMQP_PORT
+```
+
+or
+
+```sh
+cd build/staged/bin
+./basicReplier amqp://SOLACE_HOST:AMQP_PORT
+./basicRequestor amqp://SOLACE_HOST:AMQP_PORT
+```
+
 
 ### Sample Output
 
-First start the `SimpleReplier` so that it is up and waiting for requests.
+First start the `BasicReplier` so that it is up and waiting for requests.
 
-~~~sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.SimpleReplier
-2017-06-29T17:23:00,880 INFO sasl.SaslMechanismFinder - Best match for SASL auth was: SASL-ANONYMOUS
-2017-06-29T17:23:00,893 INFO samples.SimpleReplier - Waiting for a request...
-2017-06-29T17:23:00,913 INFO jms.JmsConnection - Connection ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1 connected to remote Broker: amqp://192.168.123.45:8555
-~~~
+```sh
+$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.BasicReplier amqp://SOLACE_HOST:AMQP_PORT
+BasicReplier is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
+Connected to the Solace router with client username 'clientUsername'.
+Awaiting request...
+```
 
-Then you can start the `SimpleRequestor` to send the request and receive the reply.
-~~~sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.SimpleRequestor
-2017-06-29T17:23:32,613 INFO sasl.SaslMechanismFinder - Best match for SASL auth was: SASL-ANONYMOUS
-2017-06-29T17:23:32,642 INFO jms.JmsConnection - Connection ID:655fc087-7c2f-4e40-8fc2-cf40a4a05ba8:1 connected to remote Broker: amqp://192.168.123.45:8555
-2017-06-29T17:23:32,712 INFO samples.SimpleRequestor - Request message sent successfully, waiting for a reply...
-2017-06-29T17:23:32,752 INFO samples.SimpleRequestor - Received reply: "Reply to "Request with String Data""
-2017-06-29T17:23:32,757 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:655fc087-7c2f-4e40-8fc2-cf40a4a05ba8:1:1:1, destination = #P2P/QTMP/v:vmr-133-16/qpid-jms:temp-queue-creator:ID:655fc087-7c2f-4e40-8fc2-cf40a4a05ba8:1:1 }
-~~~
+Then you can start the `BasicRequestor` to send the request and receive the reply.
+```sh
+$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.BasicRequestor amqp://SOLACE_HOST:AMQP_PORT
+BasicRequestor is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
+Connected to the Solace router with client username 'clientUsername'.
+Sending request 'Sample Request' to topic 'T/GettingStarted/requests'...
+Sent successfully. Waiting for reply...
+TextMessage response received: 'Sample response'
+Message Content:
+JmsTextMessage { org.apache.qpid.jms.provider.amqp.message.AmqpJmsTextMessageFacade@527740a2 }
+```
 
-Notice how the request is received by the `SimpleReplier` and replied to.
+Notice how the request is received by the `BasicReplier` and replied to.
 
-~~~sh
-...
-2017-06-29T17:23:00,893 INFO samples.SimpleReplier - Waiting for a request...
-2017-06-29T17:23:00,913 INFO jms.JmsConnection - Connection ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1 connected to remote Broker: amqp://192.168.123.45:8555
-2017-06-29T17:23:32,727 INFO samples.SimpleReplier - Received request with string data: "Request with String Data"
-2017-06-29T17:23:32,742 INFO samples.SimpleReplier - Request Message replied successfully.
-2017-06-29T17:23:35,746 INFO jms.JmsSession - A JMS MessageConsumer has been closed: JmsConsumerInfo: { ID:c512a0a2-3f83-42b4-a80f-f9f23f644d88:1:1:1, destination = amqp/tutorial/queue }
-~~~
+```sh
+Awaiting request...
+Received request, responding...
+Responded successfully. Exiting...
+```
 
 Now you know how to use JMS 2.0 API over AMQP using the Solace Message Router to implement the request/reply message exchange pattern.
 
