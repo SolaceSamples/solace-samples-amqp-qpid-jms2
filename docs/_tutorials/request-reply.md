@@ -77,9 +77,27 @@ This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-speci
 
 ## Obtaining JMS 2.0 API
 
-This tutorial depends on you having the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html) downloaded and installed for your project, and the instructions in this tutorial assume you successfully done it. If your environment differs then adjust the build instructions appropriately.
+This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
-The easiest way to do it through Maven. See the project's *pom.xml* file for details.
+The easiest way to install it is through Gradle or Maven.
+
+### Get the API: Using Gradle
+
+```
+dependencies {
+    compile("org.apache.qpid:qpid-jms-client:0.23.+")
+}
+```
+
+### Get the API: Using Maven
+
+```
+<dependency>
+    <groupId>org.apache.qpid</groupId>
+    <artifactId>qpid-jms-client</artifactId>
+    <version>[0.23,)</version>
+</dependency>
+```s.
 
 ## Connecting to the Solace Message Router
 
@@ -229,31 +247,13 @@ cd {{ site.baseurl | remove: '/'}}
 
 ### Building
 
-Modify the *jndi.properties* file to reflect your Solace Message Router host and port number for the AMQP service.
-
-You can build and run both example files directly from Eclipse.
-
-To build a jar file that includes all dependencies execute the following:
-
-```sh
-mvn compile
-mvn assembly:single
-```
-
-or
+You can build and run both example files directly from Eclipse or with Gradle.
 
 ```sh
 ./gradlew assemble
 ```
 
-Then the examples can be executed as:
-
-```sh
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.BasicReplier amqp://SOLACE_HOST:AMQP_PORT
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.BasicRequestor amqp://SOLACE_HOST:AMQP_PORT
-```
-
-or
+The examples can be run as:
 
 ```sh
 cd build/staged/bin
@@ -267,7 +267,7 @@ cd build/staged/bin
 First start the `BasicReplier` so that it is up and waiting for requests.
 
 ```sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.BasicReplier amqp://SOLACE_HOST:AMQP_PORT
+$ basicReplier amqp://SOLACE_HOST:AMQP_PORT
 BasicReplier is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
 Connected to the Solace router with client username 'clientUsername'.
 Awaiting request...
@@ -275,7 +275,7 @@ Awaiting request...
 
 Then you can start the `BasicRequestor` to send the request and receive the reply.
 ```sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar com.solace.samples.BasicRequestor amqp://SOLACE_HOST:AMQP_PORT
+$ basicRequestor amqp://SOLACE_HOST:AMQP_PORT
 BasicRequestor is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
 Connected to the Solace router with client username 'clientUsername'.
 Sending request 'Sample Request' to topic 'T/GettingStarted/requests'...
