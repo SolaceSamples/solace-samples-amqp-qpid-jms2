@@ -18,7 +18,7 @@
  */
 
 /**
- *  Solace AMQP JMS 2.0 Examples: QueueSender
+ *  Apache Qpid JMS 2.0 Solace AMQP Examples: QueueSender
  */
 
 package com.solace.samples;
@@ -31,7 +31,7 @@ import javax.jms.Queue;
 import javax.jms.TextMessage;
 
 /**
- * Sends a persistent message to a queue using JMS 2.0 API over AMQP 1.0. Solace Message Router is used as the message
+ * Sends a persistent message to a queue using Apache Qpid JMS 2.0 API over AMQP 1.0. Solace Message Router is used as the message
  * broker.
  * 
  * The queue used for messages must exist on the message broker.

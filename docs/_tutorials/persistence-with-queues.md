@@ -5,7 +5,7 @@ summary: Demonstrates persistent messages for guaranteed delivery.
 icon: persistence-with-queues-icon.png
 ---
 
-This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}, and will show you how to send and receive persistent messages with JMS 2.0 API client using AMQP and Solace Message Router.
+This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}, and will show you how to send and receive persistent messages with Apache Qpid JMS 2.0 API client using AMQP and Solace Message Router.
 
 ![Sample Image Text]({{ site.baseurl }}/images/persistence-with-queues-icon.png)
 
@@ -29,7 +29,7 @@ One simple way to get access to a Solace message router is to start a Solace VMR
 
 ## Goals
 
-The goal of this tutorial is to demonstrate how to use JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
+The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
 
 1.  How to send a persistent message to a durable queue on the Solace message router
 2.  How to bind to this queue and receive a persistent message
@@ -75,7 +75,7 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Obtaining JMS 2.0 API
+## Obtaining Apache Qpid JMS 2.0 API
 
 This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
@@ -114,7 +114,7 @@ String solaceHost = args[0];
 ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
 ```
 
-Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
+Notice how Apache Qpid JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
 *QueueProducer.java/QueueConsumer.java*
 ```java
@@ -137,7 +137,7 @@ See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for
 
 See [Management Tools]({{ site.docs-management-tools }}){:target="_top"} for other tools for configure durable queues.
 
-JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
+The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
 
 *QueueProducer.java*
 ```java
@@ -154,7 +154,7 @@ To receive a persistent message from a queue a JMS *Consumer* needs to be create
 
 ![]({{ site.baseurl }}/images/persistence-with-queues-details-1.png)
 
-JMS 2.0 API allows the use of *method chaining* to create the consumer and receive messages sent to the subscribed queue.
+The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive messages sent to the subscribed queue.
 
 *QueueConsumer.java*
 ```java
@@ -226,6 +226,6 @@ Message Content:
 JmsTextMessage { org.apache.qpid.jms.provider.amqp.message.AmqpJmsTextMessageFacade@be64738 }
 ```
 
-Now you know how to use JMS 2.0 API over AMQP using the Solace Message Router to send and receive persistent messages from a queue.
+Now you know how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router to send and receive persistent messages from a queue.
 
 If you have any issues sending and receiving message or reply, check the [Solace community]({{ site.links-community }}){:target="_top"} for answers to common issues seen.

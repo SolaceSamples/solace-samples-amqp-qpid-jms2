@@ -18,7 +18,7 @@
  */
 
 /**
- *  Solace AMQP JMS 2.0 Examples: TopicSubscriber
+ *  Apache Qpid JMS 2.0 Solace AMQP Examples: TopicSubscriber
  */
 
 package com.solace.samples;
@@ -30,7 +30,7 @@ import javax.jms.Topic;
 import org.apache.qpid.jms.JmsConnectionFactory;
 
 /**
- * Subscribes to messages published to a topic using JMS 2.0 API over AMQP 1.0 Solace Message Router is used as the
+ * Subscribes to messages published to a topic using Apache Qpid JMS 2.0 API over AMQP 1.0 Solace Message Router is used as the
  * message broker.
  *
  * This is the Subscriber in the Publish/Subscribe messaging pattern.

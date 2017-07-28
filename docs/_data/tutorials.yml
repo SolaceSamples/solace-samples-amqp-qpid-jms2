@@ -1,4 +1,4 @@
-- title: AMQP JMS 2.0 Tutorials
+- title: Apache Qpid JMS 2.0 AMQP Tutorials
   tutorials:
   - publish-subscribe
   - persistence-with-queues

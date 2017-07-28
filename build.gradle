@@ -14,11 +14,11 @@ run.enabled = false
 distTar.enabled=false
 distZip.enabled=false
 
-applicationName = 'solace-samples-amqp-jms2'
+applicationName = 'solace-samples-amqp-qpid-jms2'
 version = ''
 
 jar {
-    baseName = 'solace-samples-amqp-jms2'
+    baseName = 'solace-samples-amqp-qpid-jms2'
     version =  version
     manifest {
         attributes 'Implementation-Title': 'Solace Getting Started Samples',
