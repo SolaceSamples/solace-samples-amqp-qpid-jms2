@@ -5,7 +5,7 @@ summary: Demonstrates the publish/subscribe message exchange pattern
 icon: publish-subscribe-icon.png
 ---
 
-This tutorial will show you to how to connect a JMS 2.0 API client to a Solace Message Router using AMQP, add a topic subscription and publish a message matching this topic subscription. This is the publish/subscribe message exchange pattern as illustrated here:
+This tutorial will show you to how to connect a Apache Qpid JMS 2.0 API client to a Solace Message Router using AMQP, add a topic subscription and publish a message matching this topic subscription. This is the publish/subscribe message exchange pattern as illustrated here:
 
 ![Sample Image Text]({{ site.baseurl }}/images/publish-subscribe-icon.png)
 
@@ -21,14 +21,14 @@ This tutorial assumes the following:
 
 * You are familiar with Solace messaging [core concepts]({{ site.docs-core-concepts }}){:target="_top"}.
 * You have access to a running Solace message router with the following configuration:
-    * Enabled “default” message VPN
-    * Enabled “default” client username
+    * Enabled `default` message VPN
+    * Enabled `default` client username
 
 One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will run with the “default” message VPN configured and ready for messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration, adapt the instructions to match your configuration.
 
 ## Goals
 
-The goal of this tutorial is to demonstrate how to use JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
+The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
 
 1. How to build and send a message on a topic
 2. How to subscribe to a topic and receive a message
@@ -74,7 +74,7 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Obtaining JMS 2.0 API
+## Obtaining Apache Qpid JMS 2.0 API
 
 This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
@@ -113,7 +113,7 @@ String solaceHost = args[0];
 ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
 ```
 
-Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
+Notice how Apache Qpid JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
 *TopicPublisher.java/TopicSubscriber.java*
 ```java
@@ -130,7 +130,7 @@ A JMS *Producer* needs to be created in order to publish a message to a topic.
 
 ![]({{ site.baseurl }}/images/publish-subscribe-details-2.png)
 
-JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and publish the message. We assign its delivery mode to `non-persistent` for better performance.
+The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and publish the message. We assign its delivery mode to `non-persistent` for better performance.
 
 *TopicPublisher.java*
 ```java
@@ -149,7 +149,7 @@ To receive a message from a topic a JMS *Consumer* needs to be created.
 
 ![]({{ site.baseurl }}/images/publish-subscribe-details-1.png)
 
-JMS 2.0 API allows the use of *method chaining* to create the consumer, and receive messages published to the subscribed topic.
+The JMS 2.0 API allows the use of *method chaining* to create the consumer, and receive messages published to the subscribed topic.
 
 *TopicSubscriber.java*
 ```java
@@ -220,6 +220,6 @@ Awaiting message...
 Message received: 'Hello world!'
 ```
 
-You now know how to use JMS 2.0 API over AMQP using the Solace Message Router to implement the publish/subscribe message exchange pattern.
+You now know how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router to implement the publish/subscribe message exchange pattern.
 
 If you have any issues publishing and receiving a message, check the [Solace community]({{ site.links-community }}){:target="_top"} for answers to common issues seen.

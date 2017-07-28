@@ -5,7 +5,7 @@ summary: Demonstrates the request/reply message exchange pattern
 icon: request-reply-icon.png
 ---
 
-This tutorial builds on the basic concepts introduced in the [persistence with queues tutorial]({{ site.baseurl }}/persistence-with-queues){:target="_blank"}, and will show you how to send a request, reply to it, and receive the reply. This the request/reply message exchange pattern as illustrated here:
+This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}, and will show you how to send a request, reply to it, and receive the reply with Apache Qpid JMS 1.1 client using AMQP and the Solace Message Router. This the request/reply message exchange pattern as illustrated here:
 
 ![Sample Image Text]({{ site.baseurl }}/images/request-reply-icon.png)
 
@@ -29,7 +29,7 @@ One simple way to get access to a Solace message router is to start a Solace VMR
 
 ## Goals
 
-The goal of this tutorial is to demonstrate how to use JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
+The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
 
 1. How to build and send a request message
 2. How to receive a request message and respond to it
@@ -75,7 +75,7 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Obtaining JMS 2.0 API
+## Obtaining Apache Qpid JMS 2.0 API
 
 This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
@@ -159,7 +159,9 @@ String correlationId = UUID.randomUUID().toString();
 request.setJMSCorrelationID(correlationId);
 ```
 
-Now we create a JMS producer and send the request. We assign the delivery mode to `non-persistent` for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
+Now we create a JMS producer and send the request. We assign the delivery mode to `non-persistent` for better performance.
+
+The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the message.
 
 *BasicRequestor.java*
 ```java
@@ -173,7 +175,9 @@ context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(reque
 
 In order to receive a request from a queue a JMS *Consumer* needs to be created.
 
-We create a JMS consumer and receive the request in the same, main thread. The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
+We create a JMS consumer and receive the request in the same, main thread.
+
+The JMS 2.0 API allows the use of *method chaining* to create the consumer and receive a message from the queue.
 
 *BasicReplier.java*
 ```java
@@ -210,7 +214,9 @@ String replyDestinationName = ((JmsDestination) replyDestination).getName();
 replyDestination = new JmsTemporaryQueue(replyDestinationName);
 ```
 
-A JMS producer needs to be created to send the reply message. Assign its delivery mode to `non-persistent` for better performance. The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the reply message.
+A JMS producer needs to be created to send the reply message. Assign its delivery mode to `non-persistent` for better performance.
+
+The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and send the reply message.
 
 *BasicReplier.java*
 ```java
@@ -293,6 +299,6 @@ Received request, responding...
 Responded successfully. Exiting...
 ```
 
-Now you know how to use JMS 2.0 API over AMQP using the Solace Message Router to implement the request/reply message exchange pattern.
+Now you know how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router to implement the request/reply message exchange pattern.
 
 If you have any issues sending and receiving request or reply, check the [Solace community]({{ site.links-community }}){:target="_top"} for answers to common issues seen.
