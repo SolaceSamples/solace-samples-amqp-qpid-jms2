@@ -77,9 +77,27 @@ This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-speci
 
 ## Obtaining JMS 2.0 API
 
-This tutorial depends on you having the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html) downloaded and installed for your project, and the instructions in this tutorial assume you successfully done it. If your environment differs then adjust the build instructions appropriately.
+This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
 
-The easiest way to do it through Maven. See the project's *pom.xml* file for details.
+The easiest way to install it is through Gradle or Maven.
+
+### Get the API: Using Gradle
+
+```
+dependencies {
+    compile("org.apache.qpid:qpid-jms-client:0.23.+")
+}
+```
+
+### Get the API: Using Maven
+
+```
+<dependency>
+    <groupId>org.apache.qpid</groupId>
+    <artifactId>qpid-jms-client</artifactId>
+    <version>[0.23,)</version>
+</dependency>
+```
 
 ## Connecting to the Solace Message Router
 
@@ -164,29 +182,13 @@ cd {{ site.baseurl | remove: '/'}}
 
 ### Building
 
-You can build and run both example files directly from Eclipse.
-
-To build a jar file that includes all dependencies execute the following:
-
-```sh
-mvn compile
-mvn assembly:single
-```
-
-or
+You can build and run both example files directly from Eclipse or with Gradle.
 
 ```sh
 ./gradlew assemble
 ```
 
-Then the examples can be executed as:
-
-```sh
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueConsumer amqp://SOLACE_HOST:AMQP_PORT
-java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueProducer amqp://SOLACE_HOST:AMQP_PORT
-```
-
-or
+The examples can be run as:
 
 ```sh
 cd build/staged/bin
@@ -199,7 +201,7 @@ cd build/staged/bin
 First start the `QueueConsumer` so that it is up and waiting for messages.
 
 ```sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueConsumer amqp://SOLACE_HOST:AMQP_PORT
+$ queueConsumer amqp://SOLACE_HOST:AMQP_PORT
 QueueConsumer is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
 Connected with username 'clientUsername'.
 Awaiting message...
@@ -208,7 +210,7 @@ Awaiting message...
 Then you can start the `QueueProducer` to send the message.
 
 ```sh
-$ java -cp ./target/solace-samples-amqp-jms2-1.0.1-SNAPSHOT-jar-with-dependencies.jar  com.solace.samples.QueueProducer amqp://SOLACE_HOST:AMQP_PORT
+$ queueProducer amqp://SOLACE_HOST:AMQP_PORT
 QueueProducer is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
 Connected with username 'clientUsername'.
 Sending message 'Hello world Queues!' to queue 'Q/tutorial'...

@@ -24,6 +24,7 @@
 package com.solace.samples;
 
 import org.apache.qpid.jms.JmsConnectionFactory;
+
 import java.util.UUID;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
@@ -86,24 +87,27 @@ public class BasicRequestor {
             Message reply = context.createConsumer(replyToQueue).receive(REPLY_TIMEOUT_MS);
 
             if (reply == null) {
-                System.out.println("Failed to receive a reply in " + REPLY_TIMEOUT_MS + " msecs");
-            } else {
-                if (reply.getJMSCorrelationID() == null) {
-                    System.out.println(
-                            "Received a reply message with no correlationID. This field is needed for a direct request.");
-                } else {
-                    if (!reply.getJMSCorrelationID().equals(correlationId)) {
-                        System.out.println("Received invalid correlationID in reply message.");
-                    } else {
-                        if (reply instanceof TextMessage) {
-                            System.out.printf("TextMessage response received: '%s'%n", ((TextMessage) reply).getText());
-                        } else {
-                            System.out.println("Message response received.");
-                        }
-                        System.out.printf("Message Content:%n%s%n", reply.toString());
-                    }
-                }
+                throw new Exception("Failed to receive a reply in " + REPLY_TIMEOUT_MS + " msecs");
             }
+
+            // Process the reply
+            if (reply.getJMSCorrelationID() == null) {
+                throw new Exception(
+                        "Received a reply message with no correlationID. This field is needed for a direct request.");
+            }
+
+            // Apache Qpid JMS prefixes correlation ID with string "ID:" so remove such prefix for interoperability
+            if (!reply.getJMSCorrelationID().replaceAll("ID:", "").equals(correlationId)) {
+                throw new Exception("Received invalid correlationID in reply message.");
+            }
+
+            if (reply instanceof TextMessage) {
+                System.out.printf("TextMessage response received: '%s'%n", ((TextMessage) reply).getText());
+            } else {
+                System.out.println("Message response received.");
+            }
+
+            System.out.printf("Message Content:%n%s%n", reply.toString());
         }
     }
 

@@ -17,22 +17,59 @@ The "Getting Started" tutorials will get you up to speed and sending messages wi
 
 ## Contents
 
-This repository contains code and matching tutorial walkthroughs for different basic scenarios. It is best to view the associated [tutorials home page](https://solacesamples.github.io/solace-samples-amqp-jms2/).
+This repository contains code and matching tutorial walk throughs for basic Solace messaging patterns. For a nice introduction to the Solace API and associated tutorials, check out the [Getting Started Home Page](https://solacesamples.github.io/solace-samples-amqp-jms2/).
 
-## Exploring Tutorial Examples
+See the individual tutorials for details:
 
-### Using Eclipse
+- [Publish/Subscribe](https://solacesamples.github.io/solace-samples-amqp-jms2/publish-subscribe): Learn how to set up pub/sub messaging on a Solace VMR.
+- [Persistence](https://solacesamples.github.io/solace-samples-amqp-jms2/persistence-with-queues): Learn how to set up persistence for guaranteed delivery.
+- [Request/Reply](https://solacesamples.github.io/solace-samples-amqp-jms2/request-reply): Learn how to set up request/reply messaging.
+- [Confirmed Delivery](https://solacesamples.github.io/solace-samples-amqp-jms2/confirmed-delivery): Learn how to confirm that your messages are received by a Solace message router.
+- [Topic to Queue Mapping](https://solacesamples.github.io/solace-samples-amqp-jms2/topic-to-queue-mapping): Learn how to map existing topics to Solace queues.
 
-To generate the project metadata (.classpath and .project files), do the following:
+## Prerequisites
 
-```sh
-./mvn eclipse:eclipse
-```
+This tutorial requires the Apache Qpid JMS API library, version 0.23.0 (May 2017) or newer. Download the JMS API library to your computer from [here](https://qpid.apache.org/releases/).
 
-Once complete, you may then import the project into Eclipse:
-   *File -> Import -> Existing Maven projects*
+## Build the Samples
 
-Browse to the *'solace-samples-amqp-jms2'* root directory. The project should import free of errors.
+Just clone and build. For example:
+
+  1. clone this GitHub repository
+  1. `./gradlew assemble`
+
+## Running the Samples
+
+To try individual samples, build the project from source and then run samples like the following:
+
+    ./build/staged/bin/topicPublisher <msg_backbone_ip:port>
+
+The individual tutorials linked above provide full details which can walk you through the samples, what they do, and how to correctly run them to explore Solace messaging.
+
+## Exploring the Samples
+
+### Setting up your preferred IDE
+
+Using a modern Java IDE provides cool productivity features like auto-completion, on-the-fly compilation, assisted refactoring and debugging which can be useful when you're exploring the samples and even modifying the samples. Follow the steps below for your preferred IDE.
+
+#### Using Eclipse
+
+To generate Eclipse metadata (.classpath and .project files), do the following:
+
+    ./gradlew eclipse
+
+Once complete, you may then import the projects into Eclipse as usual:
+
+ *File -> Import -> Existing projects into workspace*
+
+Browse to the *'solace-samples-amqp-jms2'* root directory. All projects should import
+free of errors.
+
+#### Using IntelliJ IDEA
+
+To generate IDEA metadata (.iml and .ipr files), do the following:
+
+    ./gradlew idea
 
 ## Contributing
 
