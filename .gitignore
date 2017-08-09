@@ -16,3 +16,4 @@ docs/_site
 !gradle-wrapper.jar
 .gradletasknamecache
 gradle-app.setting
+.idea
