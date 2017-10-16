@@ -1,5 +1,6 @@
 # Site settings
 title: Solace Messaging using Apache Qpid JMS 2.0 over AMQP
+summary: These tutorials get you up to speed sending and receiving messages with Solace technology.
 baseurl: "/solace-samples-amqp-qpid-jms2"
 repository: https://github.com/SolaceSamples/solace-samples-amqp-qpid-jms2
 

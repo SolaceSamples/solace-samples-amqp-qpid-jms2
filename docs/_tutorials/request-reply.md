@@ -2,12 +2,10 @@
 layout: tutorials
 title: Request/Reply
 summary: Demonstrates the request/reply message exchange pattern
-icon: request-reply-icon.png
+icon: I_dev_R+R.svg
 ---
 
 This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}, and will show you how to send a request, reply to it, and receive the reply with Apache Qpid JMS 1.1 client using AMQP and the Solace Message Router. This the request/reply message exchange pattern as illustrated here:
-
-![Sample Image Text]({{ site.baseurl }}/images/request-reply-icon.png)
 
 This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
 
