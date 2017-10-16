@@ -2,12 +2,10 @@
 layout: tutorials
 title: Persistence with Queues
 summary: Demonstrates persistent messages for guaranteed delivery.
-icon: persistence-with-queues-icon.png
+icon: I_dev_Persistent.svg
 ---
 
 This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}, and will show you how to send and receive persistent messages with Apache Qpid JMS 2.0 API client using AMQP and Solace Message Router.
-
-![Sample Image Text]({{ site.baseurl }}/images/persistence-with-queues-icon.png)
 
 This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
 

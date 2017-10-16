@@ -2,12 +2,10 @@
 layout: tutorials
 title: Publish/Subscribe
 summary: Demonstrates the publish/subscribe message exchange pattern
-icon: publish-subscribe-icon.png
+icon: I_dev_P+S.svg
 ---
 
 This tutorial will show you to how to connect a Apache Qpid JMS 2.0 API client to a Solace Message Router using AMQP, add a topic subscription and publish a message matching this topic subscription. This is the publish/subscribe message exchange pattern as illustrated here:
-
-![Sample Image Text]({{ site.baseurl }}/images/publish-subscribe-icon.png)
 
 This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
 
