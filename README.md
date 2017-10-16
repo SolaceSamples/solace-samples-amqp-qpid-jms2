@@ -36,6 +36,8 @@ This tutorial requires the Apache Qpid JMS API library, version 0.23.0 (May 2017
 Just clone and build. For example:
 
   1. clone this GitHub repository
+  1. cd into cloned repository
+  1. chmod +x gradlew
   1. `./gradlew assemble`
 
 ## Running the Samples
