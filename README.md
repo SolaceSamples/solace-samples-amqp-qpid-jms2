@@ -37,7 +37,6 @@ Just clone and build. For example:
 
   1. clone this GitHub repository
   1. cd into cloned repository
-  1. chmod +x gradlew
   1. `./gradlew assemble`
 
 ## Running the Samples
