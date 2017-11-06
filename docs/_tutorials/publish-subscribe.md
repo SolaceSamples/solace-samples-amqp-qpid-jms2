@@ -3,6 +3,11 @@ layout: tutorials
 title: Publish/Subscribe
 summary: Demonstrates the publish/subscribe message exchange pattern
 icon: I_dev_P+S.svg
+links:
+    - label: TopicPublisher.java
+      link: /blob/master/src/main/java/com/solace/samples/TopicPublisher.java
+    - label: TopicSubscriber.java
+      link: //blob/master/src/main/java/com/solace/samples/TopicSubscriber.java
 ---
 
 This tutorial will show you to how to connect a Apache Qpid JMS 2.0 API client to a Solace Message Router using AMQP, add a topic subscription and publish a message matching this topic subscription. This is the publish/subscribe message exchange pattern as illustrated here:
@@ -17,12 +22,16 @@ This tutorial focuses on using a non-Solace JMS API implementation. For using th
 
 This tutorial assumes the following:
 
-* You are familiar with Solace messaging [core concepts]({{ site.docs-core-concepts }}){:target="_top"}.
-* You have access to a running Solace message router with the following configuration:
-    * Enabled `default` message VPN
-    * Enabled `default` client username
+*   You are familiar with Solace [core concepts]({{ site.docs-core-concepts }}){:target="_top"}.
+*   You have access to Solace messaging with the following configuration details:
+    *   Connectivity information for a Solace message-VPN
+    *   Enabled client username and password
 
-One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will run with the “default” message VPN configured and ready for messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration, adapt the instructions to match your configuration.
+{% if jekyll.environment == 'solaceCloud' %}
+One simple way to get access to Solace messaging quickly is to create a messaging service in Solace Cloud [as outlined here]({{ site.links-solaceCloud-setup}}){:target="_top"}. You can find other ways to get access to Solace messaging on the [home page]({{ site.baseurl }}/) of these tutorials.
+{% else %}
+One simple way to get access to a Solace message router is to start a Solace VMR load [as outlined here]({{ site.docs-vmr-setup }}){:target="_top"}. By default the Solace VMR will with the “default” message VPN configured and ready for guaranteed messaging. Going forward, this tutorial assumes that you are using the Solace VMR. If you are using a different Solace message router configuration adapt the tutorial appropriately to match your configuration.
+{% endif %}
 
 ## Goals
 
@@ -31,34 +40,12 @@ The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API o
 1. How to build and send a message on a topic
 2. How to subscribe to a topic and receive a message
 
-## Solace message router properties
-
-In order to send or receive messages to a Solace message router, you need to know a few details about how to connect to the Solace message router. Specifically, you need to know the following:
-
-<table>
-<tbody>
-<tr>
-<th>Resource</th>
-<th>Value</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>Host</td>
-<td>String of the form <code>DNS name</code> or <code>IP:Port</code></td>
-<td>This is the address clients use when connecting to the Solace Message Router to send and receive messages. For a Solace VMR this there is only a single interface so the IP is the same as the management IP address. For Solace message router appliances this is the host address of the message-backbone. The port number must match the port number for the plain text AMQP service on the router.</td>
-</tr>
-<tr>
-<td>Message VPN</td>
-<td>String</td>
-<td>The “default” Solace message router Message VPN that this client will connect to.</td>
-</tr>
-<tr>
-<td>Client Username</td>
-<td>String</td>
-<td>The “default” client username.</td>
-</tr>
-</tbody>
-</table>
+{% if jekyll.environment == 'solaceCloud' %}
+  {% include solaceMessaging-cloud.md %}
+{% else %}
+    {% include solaceMessaging.md %}
+{% endif %}  
+{% include jmsApi.md %}
 
 ## Java Messaging Service (JMS) Introduction
 
@@ -72,30 +59,6 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Obtaining Apache Qpid JMS 2.0 API
-
-This tutorial assumes you have downloaded and successfully installed the [Apache Qpid JMS client](https://qpid.apache.org/components/jms/index.html). If your environment differs from the example, then adjust the build instructions appropriately.
-
-The easiest way to install it is through Gradle or Maven.
-
-### Get the API: Using Gradle
-
-```
-dependencies {
-    compile("org.apache.qpid:qpid-jms-client:0.23.+")
-}
-```
-
-### Get the API: Using Maven
-
-```
-<dependency>
-    <groupId>org.apache.qpid</groupId>
-    <artifactId>qpid-jms-client</artifactId>
-    <version>[0.23,)</version>
-</dependency>
-```
-
 ## Connecting to the Solace Message Router
 
 In order to send or receive messages, an application must start a JMS connection and a session.
@@ -104,11 +67,8 @@ There are three parameters for establishing the JMS connection: the Solace Messa
 
 *TopicPublisher.java/TopicSubscriber.java*
 ```java
-final String SOLACE_USERNAME = "clientUsername";
-final String SOLACE_PASSWORD = "password";
-
 String solaceHost = args[0];
-ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
+ConnectionFactory connectionFactory = new JmsConnectionFactory(solaceUsername, solacePassword, solaceHost);
 ```
 
 Notice how Apache Qpid JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
@@ -163,8 +123,11 @@ If you execute the `TopicSubscriber.java` program, it will block at the `receive
 
 Combining the example source code shown above results in the following source code files:
 
-*   [TopicPublisher.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/TopicPublisher.java){:target="_blank"}
-*   [TopicSubscriber.java]({{ site.repository }}/blob/master/src/main/java/com/solace/samples/TopicSubscriber.java){:target="_blank"}
+<ul>
+{% for item in page.links %}
+<li><a href="{{ site.repository }}{{ item.link }}" target="_blank">{{ item.label }}</a></li>
+{% endfor %}
+</ul>
 
 ### Getting the Source
 
@@ -187,8 +150,8 @@ The examples can be run as:
 
 ```sh
 cd build/staged/bin
-./topicSubscriber amqp://SOLACE_HOST:AMQP_PORT
-./topicPublisher amqp://SOLACE_HOST:AMQP_PORT
+./topicSubscriber amqp://<HOST:AMQP_PORT> <USERNAME> <PASSWORD>
+./topicPublisher amqp://<HOST:AMQP_PORT> <USERNAME> <PASSWORD>
 ```
 
 ### Sample Output
@@ -196,17 +159,16 @@ cd build/staged/bin
 First, start `TopicSubscriber` so that it is up and waiting for published messages. You can start multiple instances of this application, and all of them will receive published messages.
 
 ```sh
-$ topicSubscriber amqp://SOLACE_HOST:AMQP_PORT
-TopicSubscriber is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT...
+$ topicSubscriber amqp://<HOST:AMQP_PORT> <USERNAME> <PASSWORD>
+TopicSubscriber is connecting to Solace router amqp://<HOST:AMQP_PORT>...
 Connected to the Solace router with client username 'clientUsername'.
 Awaiting message...
 ```
 
 Then you can start `TopicPublisher` to publish a message.
 ```sh
-$ topicPublisher amqp://SOLACE_HOST:AMQP_PORT
-TopicPublisher is connecting to Solace router amqp://SOLACE_HOST:AMQP_PORT…
-Connected to the Solace Message VPN 'default' with client username 'clientUsername'.
+$ topicPublisher amqp://<HOST:AMQP_PORT> <USERNAME> <PASSWORD>
+TopicPublisher is connecting to Solace router amqp://<HOST:AMQP_PORT>…
 Sending message 'Hello world!' to topic 'T/GettingStarted/pubsub'...
 Sent successfully. Exiting...
 ```

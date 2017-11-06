@@ -38,22 +38,21 @@ import org.apache.qpid.jms.JmsConnectionFactory;
  */
 public class TopicPublisher {
 
-    final String SOLACE_USERNAME = "clientUsername";
-    final String SOLACE_PASSWORD = "password";
-
     final String TOPIC_NAME = "T/GettingStarted/pubsub";
 
     private void run(String... args) throws Exception {
         String solaceHost = args[0];
+        String solaceUsername = args[1];
+        String solacePassword = args[2];
         System.out.printf("TopicPublisher is connecting to Solace router %s...%n", solaceHost);
 
         // Programmatically create the connection factory using default settings
-        ConnectionFactory connectionFactory = new JmsConnectionFactory(SOLACE_USERNAME, SOLACE_PASSWORD, solaceHost);
+        ConnectionFactory connectionFactory = new JmsConnectionFactory(solaceUsername, solacePassword, solaceHost);
 
         // Establish connection that uses the Solace Message Router as a message broker
         try (JMSContext context = connectionFactory.createContext()) {
 
-            System.out.printf("Connected to the Solace router with client username '%s'.%n", SOLACE_USERNAME);
+            System.out.printf("Connected to the Solace router with client username '%s'.%n", solaceUsername);
 
             // Create the publishing topic programmatically
             Topic topic = context.createTopic(TOPIC_NAME);
@@ -71,8 +70,8 @@ public class TopicPublisher {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            System.out.println("Usage: TopicPublisher amqp://<msg_backbone_ip:amqp_port>");
+        if (args.length < 3) {
+            System.out.println("Usage: TopicPublisher amqp://<msg_backbone_ip:amqp_port> <username> <password>");
             System.exit(-1);
         }
         new TopicPublisher().run(args);
