@@ -10,7 +10,7 @@ links:
       link: /blob/master/src/main/java/com/solace/samples/QueueConsumer.java
 ---
 
-This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe), and will show you how to send and receive persistent messages from a Solace message router queue in a point to point fashion.
+This tutorial builds on the basic concepts introduced in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe), and will show you how to send and receive persistent messages with Apache Qpid JMS 2.0 API client using AMQP and Solace messaging.
 
 This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
 
