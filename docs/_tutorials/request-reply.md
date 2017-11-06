@@ -59,11 +59,11 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Connecting to the Solace Message Router
+## Connecting to the Solace Messaging
 
 In order to send or receive messages, an application must start a JMS connection and a session.
 
-There are three parameters for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number, the client username and the optional password.
+There are three parameters for establishing the JMS connection: the Solace messaging host name with the AMQP service port number, the client username and the optional password.
 
 *BasicRequestor.java/BasicReplier.java*
 ```java
@@ -84,7 +84,7 @@ The session created by the `JMSContext` object by default is non-transacted and 
 
 Notice how JMS 2.0 API combines `Connection` and `Session` objects into the `JMSContext` object.
 
-At this point the application is connected to the Solace Message Router and ready to send and receive request and reply messages.
+At this point the application is connected to Solace messaging and ready to send and receive request and reply messages.
 
 ## Sending a request
 
@@ -261,6 +261,6 @@ Received request, responding...
 Responded successfully. Exiting...
 ```
 
-Now you know how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router to implement the request/reply message exchange pattern.
+Now you know how to use Apache Qpid JMS 2.0 API over AMQP using Solace messaging to implement the request/reply message exchange pattern.
 
 If you have any issues sending and receiving request or reply, check the [Solace community]({{ site.links-community }}){:target="_top"} for answers to common issues seen.

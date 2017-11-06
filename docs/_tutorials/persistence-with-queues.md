@@ -36,9 +36,9 @@ One simple way to get access to a Solace message router is to start a Solace VMR
 
 ## Goals
 
-The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router. This tutorial will show you:
+The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API over AMQP using Solace messaging. This tutorial will show you:
 
-1.  How to send a persistent message to a durable queue on the Solace message router
+1.  How to send a persistent message to a durable queue using Solace messaging
 2.  How to bind to this queue and receive a persistent message
 
 {% if jekyll.environment == 'solaceCloud' %}
@@ -60,11 +60,11 @@ The last (Oracle docs) link points you to the JEE official tutorials which provi
 
 This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
 
-## Connecting to the Solace Message Router
+## Connecting to the Solace Messaging
 
 In order to send or receive messages, an application must start a JMS connection and a session.
 
-There are three parameters for establishing the JMS connection: the Solace Message Router host name with the AMQP service port number, the client username and the optional password.
+There are three parameters for establishing the JMS connection: the Solace messaging host name with the AMQP service port number, the client username and the optional password.
 
 *QueueProducer.java/QueueConsumer.java*
 ```java
@@ -81,7 +81,7 @@ JMSContext context = connectionFactory.createContext()
 
 The session created by the `JMSContext` object by default is non-transacted and uses the acknowledge mode that automatically acknowledges a client's receipt of a message.
 
-At this point the application is connected to the Solace Message Router and ready to send and receive messages.
+At this point the application is connected to Solace messaging and ready to send and receive messages.
 
 ## Sending a persistent message to a queue
 
@@ -89,7 +89,7 @@ In order to send a message to a queue a JMS *Producer* needs to be created.
 
 ![sending-message-to-queue]({{ site.baseurl }}/images/persistence-with-queues-details-2.png)
 
-There is no difference in the actual method calls to the JMS producer when sending a JMS `persistent` message as compared to a JMS `non-persistent` message shown in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}. The difference in the JMS `persistent` message is that the Solace Message Router will acknowledge the message once it is successfully stored on the message router and the `Producer.send()` call will not return until it has successfully received this acknowledgement. This means that in JMS, all calls to the `Producer.send()` are blocking calls and they wait for message confirmation from the Solace message router before proceeding. This is outlined in the JMS specification and Solace JMS adheres to this requirement.
+There is no difference in the actual method calls to the JMS producer when sending a JMS `persistent` message as compared to a JMS `non-persistent` message shown in the [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe){:target="_blank"}. The difference in the JMS `persistent` message is that Solace messaging will acknowledge the message once it is successfully stored by Solace messaging and the `Producer.send()` call will not return until it has successfully received this acknowledgement. This means that in JMS, all calls to the `Producer.send()` are blocking calls and they wait for message confirmation from Solace messaging before proceeding. This is outlined in the JMS specification and Solace JMS adheres to this requirement.
 
 See [Configuring Queues]({{ site.docs-confugure-queues }}){:target="_blank"} for details on how to configure durable queues on Solace Message Routers with Solace CLI.
 
@@ -187,6 +187,6 @@ Message Content:
 JmsTextMessage { org.apache.qpid.jms.provider.amqp.message.AmqpJmsTextMessageFacade@be64738 }
 ```
 
-Now you know how to use Apache Qpid JMS 2.0 API over AMQP using the Solace Message Router to send and receive persistent messages from a queue.
+Now you know how to use Apache Qpid JMS 2.0 API over AMQP using Solace messaging to send and receive persistent messages from a queue.
 
 If you have any issues sending and receiving message or reply, check the [Solace community]({{ site.links-community }}){:target="_top"} for answers to common issues seen.
