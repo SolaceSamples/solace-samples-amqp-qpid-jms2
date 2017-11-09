@@ -18,6 +18,7 @@ links-downloads: http://dev.solace.com/downloads/
 links-tech-other: http://dev.solace.com/tech/#other
 links-jms1-specification: http://download.oracle.com/otndocs/jcp/7195-jms-1.1-fr-spec-oth-JSpec/
 links-jms2-specification: http://download.oracle.com/otndocs/jcp/jms-2_0-fr-spec/
+links-solaceCloud-setup: http://cloud.solace.com/create-messaging-service/
 docs-vmr-setup: http://docs.solace.com/Solace-VMR-Set-Up/Setting-Up-VMRs.htm
 docs-core-concepts: http://docs.solace.com/Features/Core-Concepts.htm
 docs-management-tools: http://docs.solace.com/Management-Tools.htm
