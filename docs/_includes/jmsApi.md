@@ -9,7 +9,7 @@ The easiest way to install it is through Gradle or Maven.
 
 ```
 dependencies {
-    compile("org.apache.qpid:qpid-jms-client:0.23.0")
+    compile("org.apache.qpid:qpid-jms-client:0.27.0")
 }
 ```
 
