@@ -7,9 +7,11 @@ icon: I_dev_topic2q.svg
 
 This tutorial builds on the basic concepts introduced in [Persistence with Queues]({{ site.baseurl }}/persistence-with-queues) tutorial and will show you how to make use of one of Solace’s advanced queueing features called `Topic to Queue Mapping` with Apache Qpid JMS 2.0 client using AMQP and Solace messaging.
 
-This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
-
-This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({{ site.links-get-started-jms }}){:target="_blank"}.
+This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({% if jekyll.environment == 'solaceCloud' %}
+  {{ site.links-get-started-jms-cloud }}
+{% else %}
+    {{ site.links-get-started-jms-dev }}
+{% endif %}){:target="_blank"}.
 
 ## Overview
 
