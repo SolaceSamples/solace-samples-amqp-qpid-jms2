@@ -9,7 +9,7 @@ The easiest way to install it is through Gradle or Maven.
 
 ```
 dependencies {
-    compile("org.apache.qpid:qpid-jms-client:0.23.+")
+    compile("org.apache.qpid:qpid-jms-client:0.23.0")
 }
 ```
 
@@ -19,6 +19,6 @@ dependencies {
 <dependency>
     <groupId>org.apache.qpid</groupId>
     <artifactId>qpid-jms-client</artifactId>
-    <version>[0.23,)</version>
+    <version>0.27.0</version>
 </dependency>
 ```
