@@ -12,11 +12,13 @@ links:
 
 This tutorial outlines both roles in the request-response message exchange pattern. It will show you how to act as the client by creating a request, sending it and waiting for the response. It will also show you how to act as the server by receiving incoming requests, creating a reply and sending it back to the client. It builds on the basic concepts introduced in [publish/subscribe tutorial]({{ site.baseurl }}/publish-subscribe).
 
-This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
-
 At the end, this tutorial walks through downloading and running the sample from source.
 
-This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({{ site.links-get-started-jms }}){:target="_blank"}.
+This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({% if jekyll.environment == 'solaceCloud' %}
+  {{ site.links-get-started-jms-cloud }}
+{% else %}
+    {{ site.links-get-started-jms-dev }}
+{% endif %}){:target="_blank"}.
 
 ## Assumptions
 
@@ -57,7 +59,11 @@ JMS is a standard API for sending and receiving messages. As such, in addition t
 
 The last (Oracle docs) link points you to the JEE official tutorials which provide a good introduction to JMS.
 
-This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
+This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({% if jekyll.environment == 'solaceCloud' %}
+  {{ site.links-get-started-amqp-jms1-cloud }}
+{% else %}
+    {{ site.links-get-started-amqp-jms1-dev }}
+{% endif %}){:target="_blank"}.
 
 ## Connecting to the Solace Messaging
 
@@ -210,7 +216,7 @@ Clone the GitHub repository containing the Solace samples.
 
 ```
 git clone {{ site.repository }}
-cd {{ site.baseurl | remove: '/'}}
+cd {{ site.repository | split: '/' | last }}
 ```
 
 ### Building

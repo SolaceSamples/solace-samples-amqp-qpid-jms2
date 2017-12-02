@@ -12,11 +12,13 @@ links:
 
 This tutorial will show you to how to connect a Apache Qpid JMS 2.0 API client to Solace Messaging using AMQP, add a topic subscription and publish a message matching this topic subscription. This is the publish/subscribe message exchange pattern as illustrated here:
 
-This tutorial is available in [GitHub]({{ site.repository }}){:target="_blank"} along with the other [Solace Getting Started AMQP Tutorials]({{ site.links-get-started-amqp }}){:target="_top"}.
-
 At the end, this tutorial walks through downloading and running the sample from source.
 
-This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({{ site.links-get-started-jms }}){:target="_blank"}.
+This tutorial focuses on using a non-Solace JMS API implementation. For using the Solace JMS API see [Solace Getting Started JMS Tutorials]({% if jekyll.environment == 'solaceCloud' %}
+  {{ site.links-get-started-jms-cloud }}
+{% else %}
+    {{ site.links-get-started-jms-dev }}
+{% endif %}){:target="_blank"}.
 
 ## Assumptions
 
@@ -57,7 +59,11 @@ JMS is a standard API for sending and receiving messages. As such, in addition t
 
 The last (Oracle docs) link points you to the JEE official tutorials which provide a good introduction to JMS.
 
-This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({{ site.links-get-started-amqp-jms1 }}){:target="_blank"}.
+This tutorial focuses on using [JMS 2.0 (May 21, 2013)]({{ site.links-jms2-specification }}){:target="_blank"}, for [JMS 1.1 (April 12, 2002)]({{ site.links-jms1-specification }}){:target="_blank"} see [Solace Getting Started AMQP JMS 1.1 Tutorials]({% if jekyll.environment == 'solaceCloud' %}
+  {{ site.links-get-started-amqp-jms1-cloud }}
+{% else %}
+    {{ site.links-get-started-amqp-jms1-dev }}
+{% endif %}){:target="_blank"}.
 
 ## Connecting to the Solace Messaging
 
@@ -135,7 +141,7 @@ Clone the GitHub repository containing the Solace samples.
 
 ```
 git clone {{ site.repository }}
-cd {{ site.baseurl | remove: '/'}}
+cd {{ site.repository | split: '/' | last }}
 ```
 
 ### Building

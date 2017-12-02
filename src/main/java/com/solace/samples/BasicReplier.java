@@ -74,7 +74,7 @@ public class BasicReplier {
                 System.out.println("Received request, responding...");
 
                 // workaround as the Apache Qpid JMS API always sets JMSReplyTo as non-temporary
-                String replyDestinationName = ((JmsDestination) replyDestination).getName();
+                String replyDestinationName = ((JmsDestination) replyDestination).getAddress();
                 replyDestination = new JmsTemporaryQueue(replyDestinationName);
 
                 TextMessage reply = context.createTextMessage();
