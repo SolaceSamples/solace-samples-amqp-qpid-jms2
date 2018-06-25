@@ -18,15 +18,15 @@ The "Getting Started" tutorials will get you up to speed and sending messages wi
 
 ## Contents
 
-This repository contains code and matching tutorial walk throughs for basic Solace messaging patterns. For a nice introduction to the Solace API and associated tutorials, check out the [Getting Started Home Page](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/).
+This repository contains code and matching tutorial walk throughs for basic Solace messaging patterns. For a nice introduction to the Solace API and associated tutorials, check out the [Getting Started Home Page](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/).
 
 See the individual tutorials for details:
 
-- [Publish/Subscribe](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/publish-subscribe): Learn how to set up pub/sub messaging on a Solace VMR.
-- [Persistence](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/persistence-with-queues): Learn how to set up persistence for guaranteed delivery.
-- [Request/Reply](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/request-reply): Learn how to set up request/reply messaging.
-- [Confirmed Delivery](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/confirmed-delivery): Learn how to confirm that your messages are received by a Solace message router.
-- [Topic to Queue Mapping](https://solacesamples.github.io/solace-samples-amqp-qpid-jms2/topic-to-queue-mapping): Learn how to map existing topics to Solace queues.
+- [Publish/Subscribe](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/publish-subscribe): Learn how to set up pub/sub messaging on a Solace VMR.
+- [Persistence](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/persistence-with-queues): Learn how to set up persistence for guaranteed delivery.
+- [Request/Reply](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/request-reply): Learn how to set up request/reply messaging.
+- [Confirmed Delivery](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/confirmed-delivery): Learn how to confirm that your messages are received by a Solace message router.
+- [Topic to Queue Mapping](https://dev.solace.com/samples/solace-samples-amqp-qpid-jms2/topic-to-queue-mapping): Learn how to map existing topics to Solace queues.
 
 ## Prerequisites
 
