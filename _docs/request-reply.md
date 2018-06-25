@@ -38,8 +38,8 @@ The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API o
 1. How to build and send a request message
 2. How to receive a request message and respond to it
 
-{% include solaceMessaging.md %}
-{% include jmsApi.md %}
+{% include_relative assets/solaceMessaging.md %}
+{% include_relative assets/jmsApi.md %}
 
 ## Java Messaging Service (JMS) Introduction
 
@@ -88,7 +88,7 @@ At this point the application is connected to Solace messaging and ready to send
 
 In order to send a request a JMS *Producer* needs to be created.
 
-![sending-message-to-queue]({{ site.baseurl }}/images/request-reply-details-2.png)
+![sending-message-to-queue]({{ site.baseurl }}/assets/images/request-reply-details-2.png)
 
 Also, it is necessary to allocate a temporary queue for receiving the reply.
 
@@ -105,7 +105,7 @@ The `JMSCorrelationID` property needs to have an unique value so the requestor t
 
 The figure below outlines the exchange of messages and the role of both properties.
 
-![]({{ site.baseurl }}/images/request-reply-details-1.png)
+![]({{ site.baseurl }}/assets/images/request-reply-details-1.png)
 
 
 *BasicRequestor.java*
@@ -146,7 +146,7 @@ Message request = context.createConsumer(requestTopic).receive();
 
 To reply to a received request a JMS *Producer* needs to be created.
 
-![Request-Reply_diagram-3]({{ site.baseurl }}/images/request-reply-details-3.png)
+![Request-Reply_diagram-3]({{ site.baseurl }}/assets/images/request-reply-details-3.png)
 
 The reply message must have the `JMSCorrelationID` property value assigned from the received request. Create the reply message using the current `JMSContext` and assign its `JMSCorrelationID` property from the request value:
 
