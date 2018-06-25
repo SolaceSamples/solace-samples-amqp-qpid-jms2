@@ -38,8 +38,8 @@ The goal of this tutorial is to demonstrate how to use Apache Qpid JMS 2.0 API o
 1. How to build and send a message on a topic
 2. How to subscribe to a topic and receive a message
 
-{% include solaceMessaging.md %}
-{% include jmsApi.md %}
+{% include_relative assets/solaceMessaging.md %}
+{% include_relative assets/jmsApi.md %}
 
 ## Java Messaging Service (JMS) Introduction
 
@@ -84,7 +84,7 @@ At this point the application is connected to Solace messaging and ready to publ
 
 A JMS *Producer* needs to be created in order to publish a message to a topic.
 
-![]({{ site.baseurl }}/images/publish-subscribe-details-2.png)
+![]({{ site.baseurl }}/assets/images/publish-subscribe-details-2.png)
 
 The JMS 2.0 API allows the use of *method chaining* to create the producer, set the delivery mode and publish the message. We assign its delivery mode to `non-persistent` for better performance.
 
@@ -103,7 +103,7 @@ If you execute the `TopicPublisher.java` program, it will successfully publish a
 
 To receive a message from a topic a JMS *Consumer* needs to be created.
 
-![]({{ site.baseurl }}/images/publish-subscribe-details-1.png)
+![]({{ site.baseurl }}/assets/images/publish-subscribe-details-1.png)
 
 The JMS 2.0 API allows the use of *method chaining* to create the consumer, and receive messages published to the subscribed topic.
 
