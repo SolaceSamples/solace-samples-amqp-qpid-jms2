@@ -99,15 +99,15 @@ That's it! Thank you for your contribution!
 ## <a name="addFeature"></a> **Steps to add a new feature**
 
 * Add your feature source file under src/main/java/com/solace/samples/features/newFeature.java
-* Update the build.gradle file by appending your source file name to the list of scripts
-        def scripts = [ 'topicPublisher':'com.solace.samples.TopicPublisher',
-                        'topicSubscriber':'com.solace.samples.TopicSubscriber',
-                        'newFeature':'com.solace.samples.features.newFeature')
+* Update the build.gradle file by appending your source file name to the list of scripts  
+        def scripts = [ 'topicPublisher':'com.solace.samples.TopicPublisher',  
+                        'topicSubscriber':'com.solace.samples.TopicSubscriber',  
+                        'newFeature':'com.solace.samples.features.newFeature')  
 * Add your feature markdown file under \_docs/feature\_newFeature.md
 * Update the \_docs/tutorials.yml to include the new feature by appending your feature name to the features list
-        features:
-        - feature-1
-        - feature_newFeature
+        features:  
+        - feature-1  
+        - feature_newFeature  
 
 ##  <a name="questions"></a> Do you have questions about the source code?
 
