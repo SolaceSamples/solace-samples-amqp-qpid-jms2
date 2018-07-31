@@ -37,12 +37,13 @@ dependencies {
 task createAllStartScripts() << {
      // just a placeholder
 }
-  
+
 def scripts = [ 'topicPublisher':'com.solace.samples.TopicPublisher',
                 'topicSubscriber':'com.solace.samples.TopicSubscriber',
                 'queueProducer':'com.solace.samples.QueueProducer',
                 'queueConsumer':'com.solace.samples.QueueConsumer',
                 'basicRequestor':'com.solace.samples.BasicRequestor',
+                'durableTopicSubscriber':'com.solace.samples.features.DurableTopicSubscriber',
                 'basicReplier':'com.solace.samples.BasicReplier',
 ]
 

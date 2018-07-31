@@ -33,7 +33,7 @@ import org.apache.qpid.jms.JmsConnectionFactory;
 
 /**
  * Publishes a messages to a topic using Apache Qpid JMS 2.0 API over AMQP 1.0. Solace Message Router is used as the message broker.
- * 
+ *
  * This is the Publisher in the Publish/Subscribe messaging pattern.
  */
 public class TopicPublisher {
