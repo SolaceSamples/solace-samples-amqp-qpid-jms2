@@ -30,8 +30,8 @@ import javax.jms.Topic;
 import org.apache.qpid.jms.JmsConnectionFactory;
 
 /**
- * Creates a Durable JMS Subscription published to a topic using Apache Qpid JMS 2.0 API over AMQP 1.0 Solace Message Router is used as the
- * message broker. Durable JMS Subscriptions are achieve by the Solace Message Broker by Durable Topic Endpoints (DTEs).
+* This sample shows how to create a Durable JMS Subscription using Apache Qpid JMS 2.0 API over AMQP 1.0.  Solace messaging is used as the
+* message broker. In Solace messaging, durable JMS subscriptions are implemented using Durable Topic Endpoints (DTEs).
  *
  * This is the Subscriber in the Publish/Subscribe messaging pattern.
  */
@@ -53,8 +53,8 @@ public class DurableTopicSubscriber {
 
         // Establish connection that uses the Solace Message Router as a message broker
         try (JMSContext context = connectionFactory.createContext()) {
-        	// Apache Qpid JMS requires a application provided Client Id to create a Durable Consumer.
-        	// set client id on jms connection
+        	// Apache Qpid JMS requires an application provided Client Id to create a Durable Consumer.
+        	// set the client id on JMS connection
         	context.setClientID(CLIENT_ID);
 
             System.out.printf("Connected to the Solace router with client username '%s'.%n", solaceUsername);
@@ -63,8 +63,8 @@ public class DurableTopicSubscriber {
             Topic topic = context.createTopic(TOPIC_NAME);
 
             System.out.println("Awaiting message...");
-            // create or activate Durable JMS Subscription
-            // create consumer and wait for a message to arrive.
+            // create or activate a Durable JMS Subscription
+            // create a consumer and wait for a message to arrive.
             // the current thread blocks at the next statement until a message arrives
             String message = context.createDurableConsumer(topic, SUBSCRIPTION_NAME).receiveBody(String.class);
 

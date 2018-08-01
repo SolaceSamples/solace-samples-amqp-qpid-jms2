@@ -33,7 +33,7 @@ Fork the project [on GitHub](https://github.com/SolaceSamples/solace-samples-amq
 locally.
 
 ```sh
-git clone https://github.com/<my-github-repo>/solace-samples-template
+git clone https://github.com/<my-github-repo>/solace-samples-amqp-qpid-jms2
 ```
 
 #### Step 2: Branch
