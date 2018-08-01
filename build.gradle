@@ -40,6 +40,7 @@ task createAllStartScripts() << {
 
 def scripts = [ 'topicPublisher':'com.solace.samples.TopicPublisher',
                 'topicSubscriber':'com.solace.samples.TopicSubscriber',
+                'durableTopicSubscriber':'com.solace.samples.DurableTopicSubscriber',
                 'queueProducer':'com.solace.samples.QueueProducer',
                 'queueConsumer':'com.solace.samples.QueueConsumer',
                 'basicRequestor':'com.solace.samples.BasicRequestor',
