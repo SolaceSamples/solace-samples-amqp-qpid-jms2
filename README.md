@@ -30,7 +30,12 @@ See the individual tutorials for details:
 
 ## Prerequisites
 
-This tutorial requires the Apache Qpid JMS API library, version 0.23.0 (May 2017) or newer. Download the JMS API library to your computer from [here](https://qpid.apache.org/releases/).
+This tutorial requires the following:
+
+- Java 11 or newer
+- Apache Qpid JMS API library, version 2.9.0 (October 2025) or newer. Download the JMS API library to your computer from [here](https://qpid.apache.org/releases/).
+
+**Note:** Version 2.9.0 uses Jakarta EE 9+ (jakarta.jms.*) instead of the legacy Java EE (javax.jms.*) packages.
 
 ## Build the Samples
 
