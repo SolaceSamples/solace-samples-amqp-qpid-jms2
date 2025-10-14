@@ -23,9 +23,9 @@
 
 package com.solace.samples;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.Topic;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.Topic;
 
 import org.apache.qpid.jms.JmsConnectionFactory;
 

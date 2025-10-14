@@ -23,11 +23,11 @@
 
 package com.solace.samples;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
-import javax.jms.JMSContext;
-import javax.jms.TextMessage;
-import javax.jms.Topic;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.DeliveryMode;
+import jakarta.jms.JMSContext;
+import jakarta.jms.TextMessage;
+import jakarta.jms.Topic;
 
 import org.apache.qpid.jms.JmsConnectionFactory;
 
