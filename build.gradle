@@ -32,6 +32,8 @@ repositories {
 
 dependencies {
     implementation("org.apache.qpid:qpid-jms-client:2.9.0")
+    // Only required when using SERDES
+    implementation("com.solace:solace-schema-registry-jsonschema-serde:1.+")
 }
 
 task createAllStartScripts() {
@@ -45,6 +47,7 @@ def scripts = [ 'topicPublisher':'com.solace.samples.TopicPublisher',
                 'basicRequestor':'com.solace.samples.BasicRequestor',
                 'durableTopicSubscriber':'com.solace.samples.features.DurableTopicSubscriber',
                 'basicReplier':'com.solace.samples.BasicReplier',
+                'jsonSchemaPublisher':'com.solace.samples.features.serdes.jsonschema.JsonSchemaPublisher',
 ]
 
 scripts.each() { scriptName, className ->
