@@ -24,11 +24,11 @@
 package com.solace.samples;
 
 import org.apache.qpid.jms.JmsConnectionFactory;
-import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
-import javax.jms.JMSContext;
-import javax.jms.Queue;
-import javax.jms.TextMessage;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.DeliveryMode;
+import jakarta.jms.JMSContext;
+import jakarta.jms.Queue;
+import jakarta.jms.TextMessage;
 
 /**
  * Sends a persistent message to a queue using Apache Qpid JMS 2.0 API over AMQP 1.0. Solace Message Router is used as the message
